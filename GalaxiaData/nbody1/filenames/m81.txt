@@ -1,0 +1,11 @@
+nbody1/m81/
+	9	2
+m12i_res7100_md_insitu_0.ebf	0
+m12i_res7100_md_insitu_1.ebf	1
+m12i_res7100_md_insitu_2.ebf	2
+m12i_res7100_md_insitu_3.ebf	3
+m12i_res7100_md_insitu_4.ebf	4
+m12i_res7100_md_insitu_5.ebf	5
+m12i_res7100_md_insitu_6.ebf	6
+m12i_res7100_md_insitu_7.ebf	7
+m12i_res7100_md_acc.ebf	8

@@ -1,0 +1,2 @@
+GAIA-TYCHO-2MASS      31 23 8 Gmag    G_BPmag  G_RPmag  B_Tmag  V_Tmag  Jmag    Hmag    Ksmag
+

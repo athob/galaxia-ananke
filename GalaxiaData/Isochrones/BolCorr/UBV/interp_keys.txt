@@ -1,0 +1,2 @@
+files="bctab_m25n.dat",  "bctab_m20n.dat",  "bctab_m15n.dat",  "bctab_m10n.dat", "bctab_m05n.dat",  "bctab_p00n.dat",  "bctab_p05n.dat" 
+keys=-2.5, -2.0, -1.5, -1.0, -0.5, 0.0, 0.5

@@ -1,0 +1,45 @@
+#Title:   Evolutionary models for very-low-mass stars and brown dwarfs with
+#         dusty atmospheres
+#Authors: Chabrier G., Baraffe I., Allard F., Hauschildt P.
+#Table:   Same as Table 1 for 0.5 Gyr
+#================================================================================
+#Byte-by-byte Description of file: datafile2.txt
+#--------------------------------------------------------------------------------
+#   Bytes Format Units   Label     Explanations
+#--------------------------------------------------------------------------------
+#   1-  5  F5.3  solMass Mass      Mass relative to solar at 0.5 Gyrs (1)
+#   8- 13  F6.1  K       Teff      Effective temperature at 0.5 Gyrs
+#  16- 20  F5.2  solLum  Lum       Luminosity relative to solar at 0.5 Gyrs
+#  23- 26  F4.2  [cm/s2] Log(g)    Surface gravity at 0.5 Gyrs
+#  29- 33  F5.3  solRad  Radius    relative to solar at 0.5 Gyrs
+#  38- 42  F5.3  ---     Li        Lithium abundance normalized to the initial 
+#				   mass fraction of 10^-9^ at 0.5 Gyrs
+#  45- 49  F5.2  mag     Vmag      Predicted Johnson-Cousins V band magnitude
+#  52- 56  F5.2  mag     Rmag      Predicted Johnson-Cousins R band magnitude
+#  59- 63  F5.2  mag     Imag      Predicted Johnson-Cousins I band magnitude 
+#  66- 70  F5.2  mag     Jmag      Predicted CIT J band magnitude 
+#  73- 77  F5.2  mag     Kmag      Predicted CIT K band magnitude
+#  80- 84  F5.2  mag     Lmag      Predicted Johnson-Glass L' band magnitude
+#  87- 91  F5.2  mag     Mmag      Predicted Johnson M band magnitude
+#--------------------------------------------------------------------------------
+#Note (1): The Hydrogen burning minimum mass is at 0.070 solMass.
+#--------------------------------------------------------------------------------
+# Mass Teff      Lum log(g) Radius      Li   Vmag   Rmag   Imag  Jmag    Kmag   Lmag   Mmag
+<head>
+15 13 -1 4 0 1 2 3
+<head>
+0.010     1.   -9999  4.65   0.0      1.000   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+0.012     1.   -9999  4.65   0.0      1.000   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+0.015  	  1.   -9999  4.65   0.0      1.000   0.00   0.00   0.00   0.00   0.00   0.00   0.00  
+0.020   901.   -5.14  4.65  0.111    1.000  43.80  35.89  32.23  22.56  15.59  12.11  11.67  
+0.030  1170.   -4.73  4.86  0.106    1.000  33.93  28.57  25.49  18.78  13.65  11.09  11.10  
+0.040  1461.   -4.36  5.01  0.104    1.000  27.41  23.50  20.90  15.94  12.20  10.51  10.62  
+0.050  1751.   -4.06  5.11  0.103    0.954  22.45  19.47  17.10  13.18  11.35  10.23  10.36  
+0.055  1902.   -3.91  5.15  0.103    0.561  21.42  18.64  16.25  12.60  11.20  10.16  10.32  
+0.060  2048.   -3.78  5.19  0.104    0.007  20.56  17.91  15.46  12.12  11.00  10.04  10.25  
+0.070  2295.   -3.56  5.23  0.106    0.000  18.95  16.62  14.18  11.42  10.58   9.78  10.06  
+0.072  2332.   -3.52  5.24  0.107    0.000  18.71  16.44  14.01  11.34  10.51   9.74  10.02  
+0.075  2400.   -3.46  5.24  0.108    0.000  18.26  16.09  13.71  11.18  10.39   9.65   9.93  
+0.080  2505.   -3.37  5.25  0.111    0.000  17.56  15.56  13.27  10.95  10.18   9.51   9.79  
+0.090  2678.   -3.19  5.24  0.118    0.000  16.40  14.67  12.58  10.57   9.83   9.24   9.48  
+0.100  2809.   -3.05  5.23  0.128    0.000  15.52  13.97  12.06  10.25   9.52   8.99   9.19  

@@ -1,0 +1,2256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+
+
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"><title>Galaxia Code Instructions</title></head><body style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);" alink="#ee0000" link="#0000ee" vlink="#551a8b">
+<h1 style="background-color: rgb(204, 204, 204); color: rgb(51, 0, 51); font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(102, 0, 0);">Users guide for code <span style="font-family: sans-serif;">Galaxia</span>:</span></h1>
+<br>
+<ol id="mozToc">
+<!--mozToc h2 1 h3 2-->
+  <li><a href="#mozTocId448971">Introduction </a></li>
+  <li><a href="#mozTocId794927">Installation</a></li>
+  <li><a href="#mozTocId782241">Usage</a>
+    <ol>
+      <li><a href="#mozTocId743032">Initial setup, BHTree
+files: </a></li>
+      <li><a href="#mozTocId860030">Generating a
+synthetic survey : </a></li>
+      <li><a href="#mozTocId22527">Generating&nbsp;
+a stellar halo survey&nbsp; using Bullock
+and Johnston simulations: </a></li>
+      <li><a href="#mozTocId438540">Available
+photometric
+system
+and
+filters:</a></li>
+      <li><a href="#mozTocId848201">Appending&nbsp;
+catalog
+file
+with
+magnitudes
+in
+other photometric bands:</a></li>
+    </ol>
+  </li>
+  <li><a href="#mozTocId450905">Parameterfile </a></li>
+  <li><a href="#mozTocId124318">Output
+data details:</a></li>
+  <li><a href="#mozTocId373615">Adding Extinction </a></li>
+  <li><a href="#mozTocId149119">Stellar Halo </a></li>
+  <li><a href="#mozTocId231583">Data I/O tools and the ebf
+library </a></li>
+  <li><a href="#mozTocId689036">References:</a></li>
+</ol>
+<br>
+<h2 style="background-color: rgb(204, 204, 204);"><a class="mozTocH2" name="mozTocId448971"></a><span style="font-family: Helvetica,Arial,sans-serif;">Introduction</span><br>
+</h2>
+<code style="font-weight: bold;">Galaxia</code> <span style="font-family: Helvetica,Arial,sans-serif;">is a code written in
+C++ to generate a synthetic
+survey of the Milky Way. One can either use an analytic model or an
+N-body model.<br>
+The present version of the code implements the
+Besancon analytical model of the galaxy.&nbsp; <br>
+For the stellar halo, one has the additional option of using N-body
+simulations of Bullock and Johnston in which the halo is build up
+purely <br>
+by accretion of satellite galaxies.&nbsp;</span><span style="font-family: Helvetica,Arial,sans-serif;"> The program has been
+compiled
+and tested using GNU C++ compiler on both Linux and Mac OS X.&nbsp;</span>
+<br>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><br>
+<br>
+<hr style="width: 100%; height: 2px; background-color: rgb(255, 255, 255); color: rgb(51, 0, 51);">
+<h2 style="background-color: rgb(204, 204, 204); font-family: Helvetica,Arial,sans-serif;"><a class="mozTocH2" name="mozTocId794927"></a>Installation</h2>
+<code></code>
+<h4><small><br>
+</small>Select Data directory</h4>
+<span style="font-family: Helvetica,Arial,sans-serif;">A preset data
+directory&nbsp; </span><span style="font-family: Helvetica,Arial,sans-serif;">is used by the code
+to store some
+data which is used
+internally.</span><span style="font-family: Helvetica,Arial,sans-serif;">
+During configure a user should provide a path for it. This directory
+should be somewhere in the home ,&nbsp; so&nbsp; as to avoid root
+access while running setup later on (some extra files are
+created during setup).&nbsp; Also&nbsp; the data&nbsp; directory can<br>
+grow upto 2GB in size, hence it is best to keep it in home.<br>
+<br>
+Assuming that the chosen data directory is&nbsp;&nbsp; </span><code>/home/user/GalaxiaData</code><span style="font-family: Helvetica,Arial,sans-serif;">,&nbsp; then to
+install do the following<br>
+<br>
+<br>
+</span>
+<h4>Untar, compile and install<br>
+</h4>
+<code>tar -zxvf galaxia-X.X.X.tar.gz<br>
+</code><code>cd galaxia-X.X.X</code> <code><br>
+./configure --datadir=/home/user/GalaxiaData<br>
+make<br>
+sudo make install<br>
+<br>
+cp -r GalaxiaData /home/user/<br>
+</code><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+</span>
+<h4>Non root installation</h4>
+<span style="font-family: Helvetica,Arial,sans-serif;">By default the
+above commands will install the executable file in <code>/usr/local/bin</code>&nbsp;
+and
+so
+needs
+root
+access
+in
+<code>make install</code>. <br>
+If one wants to install locally </span><code></code><span style="font-family: Helvetica,Arial,sans-serif;">without root access </span><span style="font-family: Helvetica,Arial,sans-serif;">e.g. in </span><code>home/user/sw/bin/
+</code><span style="font-family: Helvetica,Arial,sans-serif;">, then do
+<br>
+</span><code><br>
+./configure --prefix=home/user/sw
+--datadir=/home/user/GalaxiaData<br>
+make<br>
+make install<br>
+</code><code>cp -r GalaxiaData /home/user/GalaxiaData<br>
+</code><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+</span><br>
+<br>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;">If </span><code style="color: rgb(102, 0, 0);">/home/user/sw/bin/&nbsp;</code><span style="font-family: Helvetica,Arial,sans-serif;"> is not already in
+your search path then you can </span><span style="font-family: Helvetica,Arial,sans-serif;">add it as follows.</span><small><br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">For bash
+shell:&nbsp; <br>
+in <big style="color: rgb(102, 0, 0);"><code>~/.bashrc</code></big></span><span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;"> </span>file add <br>
+</small>
+<code>export
+PATH=$PATH:/home/user/sw/bin </code><small><br>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+For tcsh or csh: <br>
+in </small>
+<code>~/.chsrc</code><small>
+file add<br>
+</small><code>set PATH = ($PATH
+/home/user/sw/bin) <br>
+</code><br>
+<br>
+<h4>Installing ebf library<br>
+</h4>
+<span style="font-family: Helvetica,Arial,sans-serif;">Output files are
+in a special binary format known as EBF.&nbsp; To read them one has to additionally install the <br>
+ebf library
+corresponding to the programming language of ones choice. To download ebf library go to<br>
+<a href="http://ebfformat.sourceforge.net">http://ebfformat.sourceforge.net</a><br>
+Currently
+supported languages are c, c++, fortran, java, python, idl <br>
+and
+matlab. </span><span style="font-family: Helvetica,Arial,sans-serif;">See the
+ebf documentation <span style="font-style: italic; font-weight: bold;">ebfdocs-x.x.x/index.html</span>&nbsp;
+for
+details
+on installing the ebf library for your preferred programming <br>
+language. Note, just putting the matlab and IDL scripts in your search
+path is not enough see the README <br>
+or installation instruction for each library.</span><br>
+<code></code><code></code><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+</span><br>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;"></span>
+<h4>Installing ebftkpy<br>
+</h4>
+<span style="font-family: Helvetica,Arial,sans-serif;">To manipulate
+the output files one needs to install ebftkpy, which is
+automatically installed when the python ebf module is installed.</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">The python
+module will be installed in a standard location but&nbsp; where the</span>
+<code>ebftkpy</code> <span style="font-family: Helvetica,Arial,sans-serif;">script is installed
+can be controlled </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">by specifying</span><code>
+--install_scripts=<span style="font-style: italic; color: rgb(102, 0, 0); font-weight: bold;">mypath</span>.
+</code><span style="font-family: Helvetica,Arial,sans-serif;">The</span>
+<code style="font-style: italic; font-weight: bold; color: rgb(102, 0, 0);">mypath</code>
+<span style="font-family: Helvetica,Arial,sans-serif;">can be</span> <code>/usr/local/bin/</code>&nbsp;
+<span style="font-family: Helvetica,Arial,sans-serif;">or somewhere in
+your home directory </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">where you keep
+your programs e.g.</span>, <code>/home/user/sw/bin/</code>.&nbsp; <span style="font-family: Helvetica,Arial,sans-serif;">If mypath is not in
+your search path then you </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">need to add it
+as shown in previous section.&nbsp; Note if python numpy module is not
+installed (although it is quite standard to have it) </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">you will also
+have to install it.</span><br>
+<br>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;"></span><code>cd
+GalaxiaData/libebf_multi-X.X.X/extra/<br>
+tar -zxvf </code><code></code><code>libebf_python-X.X.X.tar.gz<br>
+cd </code><code></code><code></code><code>libebf_python-X.X.X</code><br>
+<code>sudo python setup.py install --install-scripts=<span style="font-weight: bold; color: rgb(102, 0, 0); font-style: italic;">mypath</span></code><br>
+OR<br>
+<code>python setup.py install --user </code><code>--install-scripts=<span style="font-weight: bold; color: rgb(102, 0, 0); font-style: italic;">mypath</span></code><code>
+(for non root)</code><br>
+<br>
+<br>
+<br>
+<br>
+<h4>Contents of GalaxiaData:<br>
+</h4>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;">Below is the list of
+contents of directory&nbsp;</span><code> GalaxiaData/</code> <span style="font-family: Helvetica,Arial,sans-serif;">.Only the first two
+items are of interest for the user.</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<code><br>
+</code><code>Examples/</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:&nbsp;&nbsp;&nbsp;
+<span style="font-family: Helvetica,Arial,sans-serif;">contains example
+parameterfile and fieldfile.</span><span style="font-family: Helvetica,Arial,sans-serif;"></span><br>
+<code></code><code>docs/index.html
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</code>:&nbsp;&nbsp;&nbsp; <span style="font-family: Helvetica,Arial,sans-serif;">html guide.</span><span style="font-family: Helvetica,Arial,sans-serif;"></span><br>
+<code></code><code></code><code>BHTree-2.2/bhtree_no_wf/</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:&nbsp;&nbsp;&nbsp;
+<span style="font-family: Helvetica,Arial,sans-serif;">directory
+containing the BHtree&nbsp; files (no warp and flare).</span><br>
+<code></code><code>BHTree-2.2/</code><code>bhtree_with_wf/</code>&nbsp;&nbsp;&nbsp;
+:&nbsp;&nbsp;&nbsp;
+<span style="font-family: Helvetica,Arial,sans-serif;">directory
+containing the BHtree&nbsp; files (with warp and flare).</span><br>
+<code></code><code></code><code>Isochrones/</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:&nbsp;&nbsp;&nbsp;
+<span style="font-family: Helvetica,Arial,sans-serif;">directory
+containing isochrones</span><br>
+<code>Extinction/ExMap3d_1024.ebf&nbsp; :
+&nbsp; </code><span style="font-family: Helvetica,Arial,sans-serif;">file
+containing
+3d
+extinction
+map</span><code> &nbsp; <br>
+</code><code>Extinction/</code><code>Schlegel_4096.ebf :&nbsp;&nbsp;
+<span style="font-family: Helvetica,Arial,sans-serif;"></span></code><span style="font-family: Helvetica,Arial,sans-serif;">file containing 2d
+Schlegel map</span><small><br>
+</small><code>Model/vcirc.dat</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:&nbsp;&nbsp;&nbsp;
+<span style="font-family: Helvetica,Arial,sans-serif;">A
+file
+containing
+tabulated
+values
+of
+the
+circular
+velocity
+</span><br>
+<code></code><code></code><code></code><code>Model/surface_density.ebf&nbsp;&nbsp;&nbsp;
+:&nbsp;&nbsp;
+</code><span style="font-family: Helvetica,Arial,sans-serif;">file
+containing
+surface density data for disc analytic functions &nbsp; </span><big><br>
+</big><code></code><code>nbody1/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:&nbsp;&nbsp;
+</code><span style="font-family: Helvetica,Arial,sans-serif;">directory
+for N-body
+models &nbsp; </span><big><br>
+</big><code></code><small><br>
+</small><br>
+<small><br>
+</small><span style="font-family: Helvetica,Arial,sans-serif;">After
+the installation is complete you can safely delete the directory</span>&nbsp;<code>
+galaxia-X.X.X</code> <code>.<br>
+</code><br>
+<br>
+<big><br>
+</big>
+<h2 style="background-color: rgb(204, 204, 204); font-family: Helvetica,Arial,sans-serif;"><a class="mozTocH2" name="mozTocId782241"></a>Usage</h2>
+<hr style="width: 100%; height: 2px; background-color: rgb(255, 255, 255);">
+<h3 style="background-color: rgb(255, 255, 255);"><a class="mozTocH3" name="mozTocId743032"></a><span style="font-family: Helvetica,Arial,sans-serif;">Initial setup, BHTree
+files:</span><br>
+</h3>
+<span style="font-family: Helvetica,Arial,sans-serif;">Before the
+code can be used one should generate the BHTree files&nbsp;
+by issuing the following command.</span><br>
+<code style="color: rgb(102, 0, 0);"><br>
+galaxia -s warp<br>
+</code><code><span style="color: rgb(102, 0, 0);"></span></code><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+which
+will create the required files in </span><code style="color: rgb(102, 0, 0);">bhtree_with_wf/</code><span style="font-family: Helvetica,Arial,sans-serif;">.&nbsp; This can take
+about<span style="font-weight: bold;"> <span style="font-style: italic;">an hour</span></span> but needs to
+be done only once.
+The code will ask for confirmation before producing these files.&nbsp;
+In case you delete the files in</span> <code style="color: rgb(102, 0, 0);">bhtree_with_wf/</code>&nbsp;&nbsp;
+<span style="font-family: Helvetica,Arial,sans-serif;">the code will
+ask you to generate them again.&nbsp; Althought not necessary but if
+one plans to
+use the option</span>&nbsp;<span style="color: rgb(102, 0, 0);"> </span><code><span style="color: rgb(102, 0, 0);">warpFlareOn=0</span> </code><span style="font-family: Helvetica,Arial,sans-serif;">in the parameterfile</span><span style="font-family: Helvetica,Arial,sans-serif;">, i.e., without warp
+and flare,&nbsp;
+then one one should also generate its separate BHTree files </span><code style="color: rgb(102, 0, 0);">(bhtree_no_wf/) </code><span style="font-family: Helvetica,Arial,sans-serif;">with </span>
+<code><span style="color: rgb(102, 0, 0);">galaxia -s nowarp</span><br>
+</code><span style="font-family: Helvetica,Arial,sans-serif;"></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<h3 style="background-color: rgb(255, 255, 255);"><a class="mozTocH3" name="mozTocId860030"></a><span style="font-family: Helvetica,Arial,sans-serif;">Generating a
+synthetic survey :</span><br>
+</h3>
+<code><span style="color: rgb(102, 0, 0);"></span><span style="color: rgb(102, 0, 0);">galaxia -r myparameterfile</span><br>
+</code><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+This will
+generate a file</span> <code style="color: rgb(102, 0, 0);">galaxy1.ebf</code>
+<span style="font-family: Helvetica,Arial,sans-serif;">in the output
+directory
+specified in</span> <code style="color: rgb(102, 0, 0);">myparameterfile</code><span style="color: rgb(102, 0, 0);">. </span><br>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;">A copy of
+parameterfile is also saved in</span> <code><span style="color: rgb(102, 0, 0);">galaxy1.ebf</span> </code><span style="font-family: Helvetica,Arial,sans-serif;">which
+can be viewed with </span><br>
+<code><span style="color: rgb(102, 0, 0);"><br>
+ebftkpy -cat galaxy1.ebf
+"/log"</span><br>
+</code>
+<code><small><br>
+</small></code><code><span style="color: rgb(102, 0, 0);"><br>
+</span></code><span style="font-family: Helvetica,Arial,sans-serif;">To
+generate a survey for a specified field list</span>. <span style="font-family: Helvetica,Arial,sans-serif;">This feature is
+experimental for the time being</span>.<br>
+<code><span style="color: rgb(102, 0, 0);"><br>
+./Galaxia -r
+--fieldfile=fieldfile.txt myparameterfile</span><br>
+</code><span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+The fieldfile should
+be <br>
+<code>&lt;head&gt;<br>
+30 3 -1 2 0 1<br>
+&lt;head&gt;<br>
+</code></span>
+<code></code><small><code>long[0]&nbsp; lat[0] extra[0] <br>
+</code></small><small><code>long[1]&nbsp; lat[1] extra[1] <br>
+</code></small><small><code>......&nbsp;&nbsp; .....&nbsp; .......<br>
+and so on<br>
+<br>
+</code></small><span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;">The
+long and lat should be&nbsp; in degrees and the area of each field will
+be taken from the parameterfile.<br>
+<code></code></span><span style="font-family: Helvetica,Arial,sans-serif;">The numbers in the
+&lt;head&gt; mean the following number of rows (r), number of columns
+(c) , unused,&nbsp; number of columns to read , <br>
+the order in which to read columns (columns are numbered from 0 to
+c-1).<br>
+</span><span style="font-family: Helvetica,Arial,sans-serif;">Example <code>myparameterfile</code>
+and<code> fieldfile</code> are provided in<code> GalaxiaData/Examples/</code><br>
+<code></code></span> <br>
+<span style="font-family: Helvetica,Arial,sans-serif;"><code></code></span>
+<h3 style="background-color: rgb(255, 255, 255);"><a class="mozTocH3" name="mozTocId22527"></a><span style="font-family: Helvetica,Arial,sans-serif;">Generating&nbsp;
+a stellar halo survey&nbsp; using Bullock
+and Johnston simulations:</span><br>
+</h3>
+<big><code></code></big><span style="font-family: Helvetica,Arial,sans-serif;"></span><big><small><code><span style="color: rgb(102, 0, 0);">galaxia
+-r --nfile=halo02
+--hdim=6&nbsp; myparameterfile&nbsp;&nbsp;&nbsp;&nbsp; </span></code></small></big><span style="font-family: Helvetica,Arial,sans-serif;">//With kinematics</span><br>
+<big><small><code><span style="color: rgb(102, 0, 0);"></span></code></small></big>
+OR<br>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><big><small><code><span style="color: rgb(102, 0, 0);">galaxia
+-r --nfile=halo02
+--hdim=3&nbsp; myparameterfile</span>&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-family: Helvetica,Arial,sans-serif;"></span></code></small></big><span style="font-family: Helvetica,Arial,sans-serif;">//Without kinematics</span><br>
+<big><small><code><span style="color: rgb(102, 0, 0);"></span></code></small></big><big><small><code><span style="color: rgb(102, 0, 0);"></span></code></small></big><br>
+<big><small><span style="font-family: Helvetica,Arial,sans-serif;">This
+will
+generate a file</span> <code>halo02.ebf</code> <span style="font-family: Helvetica,Arial,sans-serif;">in the output
+directory
+specified in</span> <code style="color: rgb(102, 0, 0);">myparameterfile</code>
+<span style="font-family: Helvetica,Arial,sans-serif;">which
+corresponds to
+halo02</span>. <br>
+<br>
+</small></big><span style="font-family: Helvetica,Arial,sans-serif;"></span><a class="mozTocH3" name="mozTocId438540"></a>Available
+photometric
+system
+and
+filters:
+<big><span style="font-family: Helvetica,Arial,sans-serif;"><small>For
+each
+photometric band the column number and data name for the
+isochrone files are shown below. The filter or band names are from
+column 7 onwards.</small><br>
+<br>
+</span></big>
+<table style="text-align: left; width: 100%; background-color: rgb(255, 255, 255);" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">Photometric<br>
+system<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">0<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">1<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">2<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">3<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">4<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">5<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">6<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">7<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">8<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">9<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">10<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">11<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">12<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">13<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">14<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">15<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">16<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">17<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">18<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">19<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(176, 196, 222); font-weight: bold;">20<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">SDSS<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">log(age/yr)</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M_ini</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M_act</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logL/Lo</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logTe</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logG</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">mbol</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">u
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">g<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">r<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">i<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">z<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">C/O<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M_hec<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">period<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">pmode<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logMdot<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">int_IMF<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235);"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">UBV<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">log(age/yr)</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M_ini</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M_act</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logL/Lo</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logTe</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logG</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">mbol</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">U<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">B<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">V<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">R<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">I<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">J<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">H<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">K<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235);"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">DCMC<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">log(age/yr)</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M_ini</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M_act</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logL/Lo</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logTe</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">logG</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">mbol</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">I<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">J<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">H<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Ks<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">STROEMGREN<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">V1<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">u<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">v<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">b<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">y<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Hb_w<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Hb_n<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<big><span style="font-family: Helvetica,Arial,sans-serif;"></span></big><br>
+<code></code>
+<h3 style="background-color: rgb(255, 255, 255); font-family: Helvetica,Arial,sans-serif;"><a class="mozTocH3" name="mozTocId848201"></a>Appending&nbsp;
+catalog
+file
+with
+magnitudes
+in
+other photometric bands:</h3>
+<code style="color: rgb(102, 0, 0);">galaxia -a
+--psys=photometricSystem galaxy1.ebf<br>
+</code>&nbsp;<br>
+<span style="font-family: Helvetica,Arial,sans-serif;">This will append
+to
+the existing file </span><code style="color: rgb(102, 0, 0);">galaxy1.ebf</code><span style="font-family: Helvetica,Arial,sans-serif;">, absolute magnitude
+in a different photometric
+system e.g&nbsp; SDSS, DCMC and so on. <br>
+</span><small><br>
+<code></code></small><code style="color: rgb(102, 0, 0);">ebftkpy
+galaxy1.ebf</code><small><br>
+</small><span style="font-family: Helvetica,Arial,sans-serif;">should
+show
+the new data objects.</span><br>
+<h4><code></code></h4>
+<h4><code>
+</code></h4>
+<h4 style="background-color: rgb(255, 255, 255);"><span style="font-family: Helvetica,Arial,sans-serif;">Help:</span><br>
+</h4>
+<code>
+<span style="color: rgb(102, 0, 0);">galaxia --help</span><br>
+</code><span style="font-family: Helvetica,Arial,sans-serif;">
+This&nbsp; displays the usage instructions incase you forget them.</span><br>
+<code style="color: rgb(153, 0, 0);"><span style="color: rgb(102, 0, 0);">NAME:</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;galaxia-x.x.x -a code to generate a synthetic galaxy survey</span><br style="color: rgb(102, 0, 0);">
+<br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">USAGE:</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;galaxia&nbsp;&nbsp;&nbsp; &nbsp;-s parameterfile</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;galaxia&nbsp;&nbsp;&nbsp; &nbsp;-r parameterfile</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;galaxia&nbsp;&nbsp;&nbsp; &nbsp;-a --psys=photometricSystem
+filename</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;galaxia&nbsp;&nbsp;&nbsp; &nbsp;-r --nfile=haloname [--hdim=3 or
+6] parameterfile</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;galaxia&nbsp;&nbsp;&nbsp; &nbsp;--copyright </span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;galaxia&nbsp;&nbsp;&nbsp; &nbsp;--help </span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">DESCRIPTION:</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;-s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+initial setup to generate BHTREE files</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;-r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+run the code to generate stellar data</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;-a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+append catalog file with magnitudes in an alternate photometric system</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;--nfile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; halo02,halo05 etc to sample
+Bullock Johnston stellar halos</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;--fieldfile&nbsp; to generate stars in specific fields</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;--hdim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dimensionality of
+smoothing lengths, for N-body models only </span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;
+&nbsp;--copyright&nbsp; print the copyright and warranty</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">CONTACT:</span><br style="color: rgb(102, 0, 0);">
+<span style="color: rgb(102, 0, 0);">Report bugs to
+&lt;bugsanjib@gmail.com&gt;</span><br>
+</code><br>
+<code style="color: rgb(102, 0, 0);"><big><small></small></big></code><code style="color: rgb(102, 0, 0);"><big> <br>
+</big></code><br>
+<big style="font-family: Helvetica,Arial,sans-serif; font-weight: bold;">Running
+multiple
+instances:</big><br>
+<big><small><span style="font-family: Helvetica,Arial,sans-serif;">You
+can run
+multiple instances of the program <code>galaxia</code> but they should
+have unique output file names or you may risk </span><span style="font-family: Helvetica,Arial,sans-serif;">two different
+instances of the program writing to the same file and hence corrupting
+the data. Note, the code creates a bunch of temporary files&nbsp;</span><span style="font-family: Helvetica,Arial,sans-serif;"> (for the parameter
+outputFile set to <code>galaxy1</code>
+the final output file&nbsp; is <code>galaxy1.ebf</code>&nbsp; and the
+temporary </span><span style="font-family: Helvetica,Arial,sans-serif;">files
+are
+named
+as<code>
+galaxy1.ebf.tmpX) </code></span><span style="font-family: Helvetica,Arial,sans-serif;">and these are deleted
+in the end.&nbsp; If the program terminates abruptly these files might
+not be deleted. In sush cases it is safe to delete them manually if
+needed. </span></small><br>
+</big><big><br>
+</big>
+<h2 style="background-color: rgb(204, 204, 204);"><a class="mozTocH2" name="mozTocId450905"></a><span style="font-family: Helvetica,Arial,sans-serif;">Parameterfile</span><br>
+</h2>
+<hr style="width: 100%; height: 2px; background-color: rgb(255, 255, 255);"><span style="font-family: Helvetica,Arial,sans-serif;">This file is used to
+setup the
+configuration of the synthetic survey. This file </span><span style="text-decoration: underline; font-family: Helvetica,Arial,sans-serif;">must
+contain
+all
+the
+listed
+parameters</span><span style="font-family: Helvetica,Arial,sans-serif;">
+followed by their values. In case you miss a
+parameter the code will remind you. See the supplied test file
+"myparameterfile" for further details.&nbsp; "% or #"&nbsp; can be used
+to
+put comments in file.&nbsp; Below is brief guide to setting up the
+parameters.</span><small><br>
+</small><br>
+<br>
+<table style="text-align: left; width: 803px; height: 918px; background-color: rgb(255, 255, 255);" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222);"><span style="font-weight: bold;">Parameter</span><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222);"><span style="font-weight: bold;">Description</span><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222);"><span style="font-weight: bold;">Fiducial
+Values</span><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><span style="color: rgb(153, 0, 0); font-style: italic;">outputFile</span><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">output
+file
+name.&nbsp;&nbsp;
+A
+suffix&nbsp;
+".ebf"&nbsp;
+will
+be
+added
+to
+the
+provided
+filename
+
+
+
+
+
+
+
+
+
+
+
+
+      <br>
+This parameter is ignored if using option<span style="font-style: italic;"> --nfile=filename</span> , for such a case
+output filename is always<span style="font-style: italic;">
+filename.ebf .</span><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">galaxy1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">outputDir</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">the
+directory
+where
+output
+file
+will
+be
+stored<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Examples/<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; font-style: italic; color: rgb(153, 0, 0); background-color: rgb(208, 220, 235);">photoSys</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">UBV
+or&nbsp;
+SDSS
+or
+&nbsp;
+DCMC
+or
+STROEMGREN</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">UBV</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; font-style: italic; color: rgb(153, 0, 0); background-color: rgb(208, 220, 235);">magColorNames</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">V,B-V<br>
+first argument is used for <span style="font-style: italic;">appMagLimits</span>
+and the second for <span style="font-style: italic;">colorLimits</span></td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">V,B-V</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">appMagLimits[0]</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Apparent
+magnitude
+limit:
+lower
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">-100<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">appMagLimits[1]</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Apparent
+magnitude
+limit:
+upper
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">30<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">absMagLimits[0]</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Absolute
+magnitude
+limit:
+lower
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">-100<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">absMagLimits[1]</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Absolute
+magnitude
+limit:
+upper
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">100<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">colorLimits[0]</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Color
+limit:
+lower<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">-100<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">colorLimits[1]</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Color
+limit:
+upper<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">100<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; font-style: italic; color: rgb(153, 0, 0); background-color: rgb(208, 220, 235);">geometryOption</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Option
+to
+set
+up
+the
+survey
+geometry.<br>
+0: All Sky<br>
+1: Circular Patch&nbsp; </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; font-style: italic; color: rgb(153, 0, 0); background-color: rgb(208, 220, 235);">longitude</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Used
+only
+if
+geometryOption=1.
+Galactic
+longitude
+in
+degrees
+of
+the
+center
+of
+the
+patch </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">0<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; font-style: italic; color: rgb(153, 0, 0); background-color: rgb(208, 220, 235);">latitude</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Used
+only
+if
+geometryOption=1.
+Galactic
+latitude
+in
+degrees
+of
+the
+center
+of
+the
+patch </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">90<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; font-style: italic; color: rgb(153, 0, 0); background-color: rgb(208, 220, 235);">surveyArea
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Used
+only
+if
+geometryOption=1
+or
+when fieldfile is set. Survey
+area
+in
+square
+degree </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">100<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">fSample<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Fraction
+of
+stars
+to
+generate.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <br>
+Normally set it to 1.0 to get the correct number of stars. If you want
+to generate <br>
+fewer stars i.e subsample the data, set it to less than one. The total
+number of stars is reduced by the factor given.<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">1.0<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">popID<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">the
+ID
+of
+the
+population
+to
+be
+generated.
+If
+set
+to
+-1
+all
+populations
+(0-9)
+are
+generated
+i.e
+
+
+
+
+
+
+
+      <br>
+&nbsp;
+0: Thin Disk&nbsp; &lt; 0.15&nbsp;&nbsp;&nbsp; Gyr<br>
+&nbsp;
+1: Thin Disk&nbsp;&nbsp;&nbsp;&nbsp; 0.15-1 Gyr<br>
+&nbsp; 2: Thin Disk&nbsp;&nbsp;&nbsp;&nbsp; 1-2 &nbsp; &nbsp;&nbsp; Gyr
+      <br>
+&nbsp;
+3: Thin Disk&nbsp;&nbsp;&nbsp;&nbsp; 2-3 &nbsp; &nbsp;&nbsp; Gyr<br>
+&nbsp;
+4: Thin Disk&nbsp;&nbsp;&nbsp;&nbsp; 3-5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Gyr<br>
+&nbsp;
+5: Thin Disk&nbsp;&nbsp;&nbsp;&nbsp; 5-7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Gyr<br>
+&nbsp;
+6: Thin Disk&nbsp;&nbsp;&nbsp;&nbsp; 7-10&nbsp;&nbsp;&nbsp; Gyr<br>
+&nbsp;
+7: Thick Disk <br>
+&nbsp;
+8: Stellar Halo<br>
+&nbsp;
+9: Bulge<br>
+10: Bullock &amp; Johnston stellar halos<br>
+If set to a number 0-10&nbsp; only that population is generated.<br>
+If using option<span style="font-style: italic;"> --nfile=filename</span>,
+the
+value
+is
+ignored and set to 10.<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">-1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; color: rgb(153, 0, 0); font-style: italic; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">warpFlareOn<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Option
+to
+set
+the
+warp
+and
+flare
+in
+the
+thin
+disk.
+If
+set
+to
+1
+warping
+and
+flaring
+is
+done
+and
+if
+set
+to
+0
+its
+not done.<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235); font-style: italic; color: rgb(153, 0, 0);">seed<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">a
+seed
+used
+to
+generate
+the
+random
+numbers.
+To
+generate
+a
+new
+random
+data
+set
+use
+a
+new
+seed.<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">17<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif; font-style: italic; color: rgb(153, 0, 0);">rmax<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235);"><span style="font-family: Helvetica,Arial,sans-serif;">the maximum radial
+distance to which the stars are desired kpc </span><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235);">1000<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif; font-style: italic; color: rgb(153, 0, 0);">starType<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">For
+future
+use.
+Currently
+must be set to 0<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">0<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><span style="font-style: italic; color: rgb(153, 0, 0);">photoError</span><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">For
+future
+use.
+Currently
+must be set to 0<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">0<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<h4><big>
+</big></h4>
+<h2 style="background-color: rgb(255, 255, 255); font-family: Helvetica,Arial,sans-serif;"><a class="mozTocH2" name="mozTocId124318"></a>Output
+data details:</h2>
+<span style="font-family: Helvetica,Arial,sans-serif;">The output
+data is in a special binary format which we call EBF
+(Efficient and Easy Binary Format) and these files are denoted with </span><code><span style="font-family: Helvetica,Arial,sans-serif;">.ebf</span></code><span style="font-family: Helvetica,Arial,sans-serif;">
+extension. <br>
+An EBF file is a collection of data objects which are labelled by
+unique tag-names. Tag names begin
+with a "/".&nbsp; By default the code <code>Galaxia</code> produces
+the
+following data objects (in the table below N is the number of stars)</span><br>
+<br>
+<table style="text-align: left; width: 776px; height: 1126px; background-color: white;" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222);"><span style="font-weight: bold;">Tag
+name&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">Description<br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">Units<br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(176, 196, 222); font-weight: bold;">layout<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/px
+/py
+pz
+&nbsp;&nbsp;&nbsp;&nbsp; </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Position&nbsp;
+(x,y,z)&nbsp;&nbsp;&nbsp;
+heliocentric<span style="color: rgb(153, 51, 153);"></span><br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">kpc</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/vx
+/vy
+/vz<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Velocity&nbsp;
+(U,V,W)
+heliocentric<span style="color: rgb(153, 51, 153);"></span></td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">km/s</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">/glon<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">galacitic
+longitude<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">degree<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">N
+x
+1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">/glat<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">galacitic
+latitude</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">degree</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">N
+x
+1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/age</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Age&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <span style="color: rgb(153, 51, 153);"></span><br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">log
+(age/yr)</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">N
+x
+1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/feh</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Metallicity
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <span style="color: rgb(153, 51, 153);"></span><br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">[Fe/H]</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">N
+x
+1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/alpha</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Alpha
+element
+abundance
+(only
+for
+Bullock
+&amp;
+Johnston
+models)<br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">[alpha/Fe]<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">N
+x
+1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/smass</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Stellar
+mass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <span style="color: rgb(153, 51, 153);"></span><br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M<sub>solar<big>
+      </big></sub></td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">N
+x
+1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/mag0</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">for
+internal
+use
+and
+consistency
+check
+only<br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">N
+x
+1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/mag1</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">for
+internal
+use
+and
+consistency
+check
+only
+
+
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">N
+x
+1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/mag2</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">for
+internal
+use
+and
+consistency
+check
+only
+
+
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">N
+x
+1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/rad</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Radial
+distance
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <span style="color: rgb(153, 51, 153);"></span><br>
+      </td>
+      <td style="vertical-align: top; color: rgb(0, 0, 0); font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">kpc</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">N
+x
+1</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/popid</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Population
+ID,
+an
+integer
+indicating
+the
+population
+type
+ranging
+from
+0
+to
+10.
+See
+parameterfile
+table for more details.<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/satid</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Satellite
+ID,
+an
+integer
+indicating
+the
+satellite
+number
+in
+simulations.
+For
+Bullock
+and
+Johnston
+simulations
+a
+satellite
+is
+uniquely
+identified
+by
+a
+pair
+of
+numbers <span style="font-weight: bold;">(h,s)</span>&nbsp;
+halo
+no
+and
+satellite
+no
+respectively.&nbsp; <span style="font-weight: bold;">(h,s)</span>
+is encoded as&nbsp; <span style="font-weight: bold;">SatID=1000*h+s</span>&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235);"><span style="font-family: Helvetica,Arial,sans-serif;">Nx1</span><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/fieldid<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Field
+no
+of
+star
+if
+--fieldfile
+option
+is
+used<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/partid</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">0
+if
+the
+star
+has
+same
+co-orodinates
+as
+that
+of
+its parent N-body
+particle or else 1<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/center</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Position
+and
+velocity
+of
+sun
+in
+galactocentric
+coordinates.<br>
+First 3 cooridnates are position and last three veolicty.<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">kpc,
+km/s<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">6<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/log</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">A
+log
+about
+the
+simulation
+containing
+details
+such
+as
+parameter&nbsp;
+file,
+code
+version
+etc.<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);"><br>
+      </td>
+    </tr>
+    
+    
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/teff</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Effective
+Temperature</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">log(T/Kelvin)</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/grav</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Surface
+gravity</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">log(gravity)</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/mbol</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Bolometric
+magnitude</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">log(L/L<sub>Sun</sub>)<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/photosys_band</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Absolute
+magnitude
+for
+different
+bands
+and
+photometric
+system
+M<sub>i</sub>, e.g DCMC_J, DCMC_K, UBV_B etc<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">mag<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/exbv_schelegl</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Extinction
+E(B-V)at
+the
+location
+of
+the
+star
+as
+given
+by
+the
+3d
+Extinction
+model
+which
+is
+normalized
+to
+match
+the
+Schlegel maps at infinity, E<sup>Schelgel</sup><sub>B-V</sub> </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">mag<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/exbv_schlegel_inf</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Extinction
+E(B-V)
+at
+infinity
+as
+given
+by
+Schelgel
+maps<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">mag<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/exbv_solar</td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Extinction
+E(B-V)
+normalized
+to
+a
+constant
+redenning
+rate
+of
+1
+in
+solar
+neighborhood,
+E<sup>Solar</sup><sub>B-V</sub>.&nbsp; Multiply by 0.53
+to get the correct redenning rate that bets fits the Schelegel data or
+use ones own value.<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">mag<br>
+      </td>
+      <td style="vertical-align: top; background-color: rgb(208, 220, 235); font-family: Helvetica,Arial,sans-serif;">Nx1<br>
+      </td>
+    </tr><tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/mact<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">While smass is the initial mass of the star, mact is the actual mass.<br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M<sub>solar</sub><br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Nx1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">/mtip</td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">For
+the given age and metallicity of the star, the mass for a star to be at
+the tip of the giant branch. Useful for detecting if the star is on
+horizontal branch or is red clump stars, the condition for which would
+be smass&gt;mtip. <br>
+      </td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">M<sub>solar</sub></td>
+      <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif; background-color: rgb(208, 220, 235);">Nx1</td>
+    </tr>
+
+  </tbody>
+</table>
+<br style="color: rgb(102, 0, 0);">
+<code style="color: rgb(102, 0, 0);">./ebftkpy galaxy1.ebf</code><small><br>
+</small><span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;">will list the data
+objects in the file <code>galaxy1.ebf</code>.</span><small><br>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+</small>
+<br>
+<h2 style="background-color: rgb(204, 204, 204);"><a class="mozTocH2" name="mozTocId373615"></a><span style="font-family: Helvetica,Arial,sans-serif;">Adding Extinction</span><br>
+</h2>
+<hr style="width: 100%; height: 2px; background-color: rgb(255, 255, 255);"><big><span style="font-family: Helvetica,Arial,sans-serif;"></span></big> <span style="font-family: Helvetica,Arial,sans-serif;">The output
+magnitudes are absolute magnitudes M</span><sub style="font-family: Helvetica,Arial,sans-serif;">i </sub><span style="font-family: Helvetica,Arial,sans-serif;">(i
+stands for the name of the band). One can convert them to apparent
+magnitudes, m</span><sub style="font-family: Helvetica,Arial,sans-serif;">i ,</sub><span style="font-family: Helvetica,Arial,sans-serif;">and also apply the
+extinction as
+follows</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="color: rgb(0, 102, 0);">m</span><sub style="color: rgb(0, 102, 0);">i</sub><span style="color: rgb(0, 102, 0);">=M</span><sub style="color: rgb(0, 102, 0);">i</sub><span style="color: rgb(0, 102, 0);">+5
+alog[100
+(r/kpc)] +E</span><sup style="color: rgb(0, 102, 0);">Schelgel</sup><sub style="color: rgb(0, 102, 0);">B-V</sub><span style="color: rgb(0, 102, 0);"> f(i)&nbsp;&nbsp; where
+f(i)=A(i)/E(B-V) </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">or one could use</span><span style="color: rgb(51, 102, 102); font-family: Helvetica,Arial,sans-serif;">
+<span style="color: rgb(0, 102, 0);">E</span></span><sup style="color: rgb(0, 102, 0); font-family: Helvetica,Arial,sans-serif;">Solar</sup><sub style="color: rgb(0, 102, 0); font-family: Helvetica,Arial,sans-serif;">B-V</sub><span style="color: rgb(0, 102, 0); font-family: Helvetica,Arial,sans-serif;">*0.53</span><span style="font-family: Helvetica,Arial,sans-serif;"> .</span><br>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">The values of </span><span style="color: rgb(0, 102, 0); font-family: Helvetica,Arial,sans-serif;">f(i)</span><span style="font-family: Helvetica,Arial,sans-serif;"> for
+different bands are given below, the data being taken from </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">David Schlegel,
+Princeton, 16 April 1999</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">Doug Finkbeiner,
+Berkeley</span>
+<br>
+<br>
+&nbsp;<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;<code style="font-family: monospace;"> Assuming an R_V=3.1 extinction curve,
+the dust maps should be multiplied</code></span><code style="font-family: monospace;"><br>
+&nbsp;&nbsp; by the value in the final column to determine the
+extinction in a given<br>
+&nbsp;&nbsp; passband.&nbsp; The standard optical-IR bandpasses are
+represented by the CTIO<br>
+&nbsp;&nbsp; and UKIRT transmission curves.&nbsp; For further details,
+see Appendix B of<br>
+&nbsp;&nbsp; the text.</code><br>
+<br>
+<code>&nbsp;&nbsp; Filter name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+LamEff&nbsp; A/A(V)&nbsp;&nbsp; <span style="color: rgb(0, 102, 0);">A/E(B-V)</span><br>
+&nbsp;&nbsp; ----------------&nbsp; ------&nbsp; -------&nbsp; -------<br>
+&nbsp;&nbsp; Landolt
+U&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3372&nbsp;&nbsp;&nbsp; 1.664&nbsp;&nbsp;&nbsp; 5.434<br>
+&nbsp;&nbsp; Landolt
+B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4404&nbsp;&nbsp;&nbsp; 1.321&nbsp;&nbsp;&nbsp; 4.315<br>
+&nbsp;&nbsp; Landolt
+V&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+5428&nbsp;&nbsp;&nbsp; 1.015&nbsp;&nbsp;&nbsp; 3.315<br>
+&nbsp;&nbsp; Landolt
+R&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6509&nbsp;&nbsp;&nbsp; 0.819&nbsp;&nbsp;&nbsp; 2.673<br>
+&nbsp;&nbsp; Landolt
+I&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+8090&nbsp;&nbsp;&nbsp; 0.594&nbsp;&nbsp;&nbsp; 1.940<br>
+&nbsp;&nbsp; CTIO
+U&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3683&nbsp;&nbsp;&nbsp;
+1.521&nbsp;&nbsp;&nbsp;
+4.968<br>
+&nbsp;&nbsp; CTIO
+B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4393&nbsp;&nbsp;&nbsp;
+1.324&nbsp;&nbsp;&nbsp;
+4.325<br>
+&nbsp;&nbsp; CTIO
+V&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+5519&nbsp;&nbsp;&nbsp;
+0.992&nbsp;&nbsp;&nbsp;
+3.240<br>
+&nbsp;&nbsp; CTIO
+R&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6602&nbsp;&nbsp;&nbsp;
+0.807&nbsp;&nbsp;&nbsp;
+2.634<br>
+&nbsp;&nbsp; CTIO
+I&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+8046&nbsp;&nbsp;&nbsp;
+0.601&nbsp;&nbsp;&nbsp;
+1.962<br>
+&nbsp;&nbsp; UKIRT
+J&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+12660&nbsp;&nbsp;&nbsp; 0.276&nbsp;&nbsp;&nbsp; 0.902<br>
+&nbsp;&nbsp; UKIRT
+H&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+16732&nbsp;&nbsp;&nbsp; 0.176&nbsp;&nbsp;&nbsp; 0.576<br>
+&nbsp;&nbsp; UKIRT
+K&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+22152&nbsp;&nbsp;&nbsp; 0.112&nbsp;&nbsp;&nbsp; 0.367<br>
+&nbsp;&nbsp; UKIRT
+L'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+38079&nbsp;&nbsp;&nbsp; 0.047&nbsp;&nbsp;&nbsp; 0.153<br>
+&nbsp;&nbsp; Gunn
+g&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+5244&nbsp;&nbsp;&nbsp;
+1.065&nbsp;&nbsp;&nbsp;
+3.476<br>
+&nbsp;&nbsp; Gunn
+r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6707&nbsp;&nbsp;&nbsp;
+0.793&nbsp;&nbsp;&nbsp;
+2.590<br>
+&nbsp;&nbsp; Gunn
+i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+7985&nbsp;&nbsp;&nbsp;
+0.610&nbsp;&nbsp;&nbsp;
+1.991<br>
+&nbsp;&nbsp; Gunn
+z&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+9055&nbsp;&nbsp;&nbsp;
+0.472&nbsp;&nbsp;&nbsp;
+1.540<br>
+&nbsp;&nbsp; Spinrad
+R&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6993&nbsp;&nbsp;&nbsp; 0.755&nbsp;&nbsp;&nbsp; 2.467<br>
+&nbsp;&nbsp; APM
+b_J&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4690&nbsp;&nbsp;&nbsp;
+1.236&nbsp;&nbsp;&nbsp;
+4.035<br>
+&nbsp;&nbsp; Stromgren
+u&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3502&nbsp;&nbsp;&nbsp; 1.602&nbsp;&nbsp;&nbsp; 5.231<br>
+&nbsp;&nbsp; Stromgren
+b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4676&nbsp;&nbsp;&nbsp; 1.240&nbsp;&nbsp;&nbsp; 4.049<br>
+&nbsp;&nbsp; Stromgren
+v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4127&nbsp;&nbsp;&nbsp; 1.394&nbsp;&nbsp;&nbsp; 4.552<br>
+&nbsp;&nbsp; Stromgren beta&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4861&nbsp;&nbsp;&nbsp; 1.182&nbsp;&nbsp;&nbsp; 3.858<br>
+&nbsp;&nbsp; Stromgren
+y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+5479&nbsp;&nbsp;&nbsp; 1.004&nbsp;&nbsp;&nbsp; 3.277<br>
+&nbsp;&nbsp; Sloan
+u'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3546&nbsp;&nbsp;&nbsp; 1.579&nbsp;&nbsp;&nbsp; 5.155<br>
+&nbsp;&nbsp; Sloan
+g'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4925&nbsp;&nbsp;&nbsp; 1.161&nbsp;&nbsp;&nbsp; 3.793<br>
+&nbsp;&nbsp; Sloan
+r'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6335&nbsp;&nbsp;&nbsp; 0.843&nbsp;&nbsp;&nbsp; 2.751<br>
+&nbsp;&nbsp; Sloan
+i'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+7799&nbsp;&nbsp;&nbsp; 0.639&nbsp;&nbsp;&nbsp; 2.086<br>
+&nbsp;&nbsp; Sloan
+z'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+9294&nbsp;&nbsp;&nbsp; 0.453&nbsp;&nbsp;&nbsp; 1.479<br>
+&nbsp;&nbsp; WFPC2
+F300W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3047&nbsp;&nbsp;&nbsp; 1.791&nbsp;&nbsp;&nbsp; 5.849<br>
+&nbsp;&nbsp; WFPC2
+F450W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4711&nbsp;&nbsp;&nbsp; 1.229&nbsp;&nbsp;&nbsp; 4.015<br>
+&nbsp;&nbsp; WFPC2
+F555W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+5498&nbsp;&nbsp;&nbsp; 0.996&nbsp;&nbsp;&nbsp; 3.252<br>
+&nbsp;&nbsp; WFPC2
+F606W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6042&nbsp;&nbsp;&nbsp; 0.885&nbsp;&nbsp;&nbsp; 2.889<br>
+&nbsp;&nbsp; WFPC2
+F702W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+7068&nbsp;&nbsp;&nbsp; 0.746&nbsp;&nbsp;&nbsp; 2.435<br>
+&nbsp;&nbsp; WFPC2
+F814W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+8066&nbsp;&nbsp;&nbsp; 0.597&nbsp;&nbsp;&nbsp; 1.948<br>
+&nbsp;&nbsp; DSS-II
+g&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4814&nbsp;&nbsp;&nbsp; 1.197&nbsp;&nbsp;&nbsp; 3.907<br>
+&nbsp;&nbsp; DSS-II
+r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6571&nbsp;&nbsp;&nbsp; 0.811&nbsp;&nbsp;&nbsp; 2.649<br>
+&nbsp;&nbsp; DSS-II
+i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+8183&nbsp;&nbsp;&nbsp; 0.580&nbsp;&nbsp;&nbsp; 1.893<br>
+</code><br>
+<h2 style="background-color: rgb(204, 204, 204);"><a class="mozTocH2" name="mozTocId149119"></a><span style="font-family: Helvetica,Arial,sans-serif;">Stellar Halo<br>
+</span></h2>
+<hr style="width: 100%; height: 2px; background-color: rgb(255, 255, 255); font-family: Helvetica,Arial,sans-serif;"><big><span style="font-family: Helvetica,Arial,sans-serif;"></span><small><span style="font-family: Helvetica,Arial,sans-serif;">Following is the list
+of stellar halos that one can generate using Bullock and Johnston
+simulations.<br>
+<span style="font-style: italic; color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'halo02','halo05','halo07','halo08','halo09','halo10','halo12','halo14','halo15','halo17','halo20'&nbsp;</span>&nbsp;
+//
+11
+&#923;CDM
+halos<br>
+<span style="font-style: italic; color: rgb(0, 102, 0);"><span style="color: rgb(102, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'newhalo_rad','newhalo_circ','newhalo_old','newhalo_young','newhalo_highl','newhalo_lowl'</span></span><span style="font-style: italic; font-weight: bold; color: rgb(0, 102, 0);">&nbsp;</span>&nbsp;
+//
+6
+with
+artificial
+accretion
+history<br>
+<br>
+The file <code>satprop.ebf</code>&nbsp; contains information related
+to properties of accretion events. </span><span style="font-family: Helvetica,Arial,sans-serif;">Properties of each
+satellite are stored in a linear list or array</span>. <span style="font-family: Helvetica,Arial,sans-serif;">The property lists
+are as follows-</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;<span style="color: rgb(153, 0, 0);"> Tsat</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=
+time
+since
+accretion,
+<span style="color: rgb(153, 0, 0);">t</span><sub style="color: rgb(153, 0, 0);">acc</sub> (Gyr)</span><span style="font-family: Helvetica,Arial,sans-serif;"><br>
+&nbsp;&nbsp;&nbsp;<span style="color: rgb(153, 0, 0);"> Jsat</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=
+circularity
+of
+orbit,<span style="color: rgb(153, 0, 0);"> </span></span><span style="color: rgb(153, 0, 0);">&#949;</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+<span style="color: rgb(153, 0, 0);">Lsat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>= luminosity <span style="color: rgb(153, 0, 0);">L</span>, (L</span><sub style="font-family: Helvetica,Arial,sans-serif;">Sun</sub><span style="font-family: Helvetica,Arial,sans-serif;">)</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+<span style="color: rgb(153, 0, 0);">Msat</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=
+dark
+matter
+mass
+of
+satellite
+<span style="color: rgb(153, 0, 0);">M</span>
+,(M</span><sub style="font-family: Helvetica,Arial,sans-serif;">Sun</sub><span style="font-family: Helvetica,Arial,sans-serif;">)</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+<span style="color: rgb(153, 0, 0);">Bsat</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=
+bound
+status.
+1
+if
+bound
+else
+0</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+<span style="color: rgb(153, 0, 0);">Esat</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=
+binding
+energy
+parameter
+<span style="color: rgb(153, 0, 0);">&#951;=R</span><sub style="color: rgb(153, 0, 0);">circ</sub><span style="color: rgb(153, 0, 0);">/R</span><sub style="color: rgb(153, 0, 0);">vir</sub></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">A pair of
+numbers <span style="color: rgb(153, 0, 0);">(h,s)</span> uniquely
+defines a satellite.</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;<span style="color: rgb(153, 0, 0);"> Nsat[h]&nbsp;&nbsp; </span>= number
+of satellites in halo number h</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;<span style="color: rgb(153, 0, 0);"> Nsatc[h]</span> = starting position in
+satellite property list</span><br>
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;"><span style="color: rgb(153, 0, 0);">Tsat[Nsatc[h]+s]</span> is the
+accretion time of satellite <span style="color: rgb(153, 0, 0);">(h,s)</span></span>.<span style="font-family: Helvetica,Arial,sans-serif;"> Valid values of <span style="color: rgb(153, 0, 0);">h</span> are 2,5,7,9,10,12,14,15,17 and
+20</span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">and valid values
+of <span style="color: rgb(153, 0, 0);">s</span> are 0 to <span style="color: rgb(153, 0, 0);">Nsat[h]-1</span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<br>
+<span style="font-family: Helvetica,Arial,sans-serif;">The information
+about the satellite</span><span style="color: rgb(153, 0, 0); font-family: Helvetica,Arial,sans-serif;">
+(h,s)</span><span style="font-family: Helvetica,Arial,sans-serif;"> is
+encoded as </span><span style="color: rgb(153, 0, 0); font-family: Helvetica,Arial,sans-serif;">SatId=1000*h+s</span><br style="color: rgb(153, 0, 0);">
+</small>
+</big> <br style="color: rgb(153, 0, 0);">
+<br>
+<h2 style="background-color: rgb(204, 204, 204); font-family: Helvetica,Arial,sans-serif;"><a class="mozTocH2" name="mozTocId231583"></a>Data I/O tools and the ebf
+library<br>
+</h2>
+<hr style="width: 100%; height: 2px; background-color: rgb(255, 255, 255); font-family: Helvetica,Arial,sans-serif;"><span style="font-family: Helvetica,Arial,sans-serif;">The ouput data is in
+a special
+binary format called EBF.&nbsp; These files are denoted by extension </span><code style="font-family: Helvetica,Arial,sans-serif;">.ebf</code><span style="font-family: Helvetica,Arial,sans-serif;">. These files are
+portable across systems with different endianess. <br>
+</span><span style="font-family: Helvetica,Arial,sans-serif;">An EBF
+file
+is a collection of data objects which are labeled by unique tag-names.
+Tag names begin
+with a "/".&nbsp; To work with ebf files one should install the
+libebf&nbsp; routines for the programming language of ones choice </span><span style="font-family: Helvetica,Arial,sans-serif;">(see the
+ebf documentation at <span style="font-style: italic; font-weight: bold;">libebf_multi-x.x.x/docs/index.html</span>
+for installation instruction and usgae) </span><span style="font-family: Helvetica,Arial,sans-serif;"></span><span style="font-family: Helvetica,Arial,sans-serif;">. To
+manipulate ebf files one should use the command line program<span style="font-style: italic; font-weight: bold;"> </span></span><span style="font-family: Helvetica,Arial,sans-serif; font-style: italic; font-weight: bold;">ebftkpy</span><span style="font-family: Helvetica,Arial,sans-serif;">. Installing the
+python ebf module will automatically install it.&nbsp; Hence, everyone
+should first install the python module.</span><span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;</span><span style="font-family: Helvetica,Arial,sans-serif;">&nbsp; Once ebf
+library for your choosen programming language is installed, loading
+data is easy. Below are some examples for
+MATLAB, Python and IDL.&nbsp; An example analysis in IDL is also shown
+one can do a similar analysis in other languages. &nbsp;&nbsp;</span>
+&nbsp; <br>
+<span style="font-family: Helvetica,Arial,sans-serif;"></span><small><code><big><br>
+</big></code></small><big><span style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"><br>
+To load data</span>:<br>
+</span></big>
+<h4><big><span style="font-family: Helvetica,Arial,sans-serif;"></span></big></h4>
+<code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);">IDL&gt;ebf_read,'galaxy1.ebf','/',data<br>
+IDL&gt; help,data,/struct<br>
+<br>
+</span></span></code><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);">MATLAB&gt;
+data=Ebf.read('galaxy1.ebf','/')<br>
+</span></span></code><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);">MATLAB&gt; data<br>
+</span></span></code><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);"></span></span></code><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);"><br>
+</span></span></code><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);">
+PYTHON&gt; import ebf<br>
+</span></span></code><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);">PYTHON&gt;
+data=ebf.read('galaxy1.ebf','/')<br>
+PYHTON&gt; print data.keys()<br>
+</span></span></code><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);"></span></span></code><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);"></span></span></code><br>
+<code><span style="color: rgb(102, 0, 0);"></span></code><br>
+<big><span style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"></span></span><span style="font-family: Helvetica,Arial,sans-serif; font-weight: bold;">An
+example analysis in IDL:</span><big style="font-family: Helvetica,Arial,sans-serif; font-weight: bold;"><big><br>
+</big></big></big><code><span style="color: rgb(102, 0, 0);"><br>
+</span></code><span style="font-family: Helvetica,Arial,sans-serif;"><code><span style="color: rgb(204, 0, 0);"><br>
+; gives a summary of the
+data objects in the file.</span></code></span><small><br>
+<code>
+</code></small><code></code><code style="color: rgb(0, 0, 0);">ebf_info,'galaxy1.ebf'</code><span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+</span><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);"><span style="color: rgb(204, 0, 0);"><br>
+; Load the file</span><br style="color: rgb(204, 0, 0);">
+ebf_read,'galaxy1.ebf','/',data<br>
+</span><br>
+<span style="color: rgb(0, 0, 0);"></span></span></code><code><span style="color: rgb(204, 0, 0);">; get info about struct and the
+parameter file used<br>
+<span style="color: rgb(0, 0, 0);"></span></span></code><code><span style="color: rgb(204, 0, 0);"><span style="color: rgb(0, 0, 0);">help,data,/struct</span><br>
+<span style="color: rgb(0, 0, 0);">print,string(data.log)</span><br style="color: rgb(0, 0, 0);">
+<br>
+; Galactic to galactocentric</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">; Typical value of Solar position
+and motion <br>
+; (X,Y,Z,U,V,W) =[-8.0, 0.0, 0.015,11.1,239.08,7.25], </span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">; also contained in data.center</span><br>
+data.px=data.px+data.center[0]<br>
+data.py=data.py+data.center[1]<br>
+data.pz=data.pz+data.center[2]<br>
+data.vx=data.vx+data.center[3]<br>
+data.vy=data.vy+data.center[4]<br>
+data.vz=data.vz+data.center[5]<br>
+<br>
+<br>
+<span style="color: rgb(204, 0, 0);">; absolute to apparent magnitude, </span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">; SDSS is photometric system and
+g,r,i are the bands</span><br>
+mapp_r=data.SDSS_r+5*alog10(data.rad*100.0) <br>
+mapp_g=data.SDSS_g+5*alog10(data.rad*100.0) <br>
+mapp_i=data.SDSS_i+5*alog10(data.rad*100.0) <br>
+<span style="color: rgb(204, 0, 0);"></span><br>
+<span style="color: rgb(204, 0, 0);">; Add extinction</span><br>
+<span style="color: rgb(204, 0, 0);">; the function
+aebv_factor(bandname)&nbsp; gives the factor A/E(B-V) for the required
+band <br>
+; and can be written by the user from the table given above.<br>
+</span></code><code><big style="color: rgb(204, 0, 0);"><span style="font-family: Helvetica,Arial,sans-serif;"></span></big></code><code style="font-weight: bold; font-style: italic;"><span style="color: rgb(204, 0, 0);">; assuming the user has written the
+function <span style="color: rgb(0, 0, 0);">aebv_factor()</span><br>
+</span></code><code style="font-weight: bold; font-style: italic;"><big style="color: rgb(204, 0, 0);"><span style="font-family: Helvetica,Arial,sans-serif;"></span></big></code><code></code><br>
+<code>mapp_r=mapp_r+data.exbv_schlegel*aebv_factor('Sloan_r')<br>
+mapp_g=mapp_g+data.exbv_schlegel*aebv_factor('Sloan_g')<br>
+mapp_i=mapp_i+data.exbv_schlegel*aebv_factor('Sloan_i')<br>
+<br>
+</code><code><span style="color: rgb(204, 0, 0);"></span></code><br>
+<code><span style="color: rgb(204, 0, 0);">; this cotains the satellite
+properties like circularity, lum,t_acc etc</span><br>
+ebf_read,'../data/satprop.ebf','/',satprop<br>
+<span style="color: rgb(204, 0, 0);"></span>help,satprop,/struct<br>
+print,string(satprop.log)</code><code><span style="color: rgb(204, 0, 0);"> ; information about satprop</span><br style="color: rgb(204, 0, 0);">
+</code><br>
+<code><br>
+<br>
+<span style="color: rgb(204, 0, 0);"></span></code><code><span style="color: rgb(204, 0, 0);">; The option below is only for sampled
+N-body stellar halos</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);"></span></code><code><span style="color: rgb(204, 0, 0);">; Shows the use of satid and
+satprop</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">; plot satellites with </span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);"></span></code><code>
+</code><code><span style="color: rgb(204, 0, 0);">; (t_acc&gt;10 Gyr)
+AND
+(lum&gt;1e6 L_sun) AND (circularity&gt;0.5) </span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);"></span></code><code></code><code><span style="color: rgb(204, 0, 0);">; for sat no 's' in halo 'h'&nbsp;
+(h,s)-&gt; satid=h*1000+s&nbsp; </span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">; id in satprop.tsat array</span>
+is given by<br>
+id=satprop.nsatc[data.satid/1000]+(data.satid mod 1000)<br>
+<span style="color: rgb(204, 0, 0);">; locate the required particles</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);"></span>ind=where(satprop.tsat[id]
+gt 10)and(satprop.lsat[id] gt
+1e6)and(satprop.jsat[id] gt 0.5)<br>
+</code><code><span style="color: rgb(204, 0, 0);">; plot them</span><br style="color: rgb(204, 0, 0);">
+</code><code>plot,data.px[ind],data.pz[ind],psym=3,xrange=[-100,100],yrange=[-100,100]</code><small><code><big></big></code></small><code><br>
+</code><code><br>
+</code>
+<h2 style="background-color: rgb(204, 204, 204); font-family: Helvetica,Arial,sans-serif;"><a class="mozTocH2" name="mozTocId689036"></a>References:<br>
+</h2>
+<br>
+<span style="font-family: Helvetica,Arial,sans-serif;">The main
+reference for <span style="font-style: italic; font-weight: bold;">galaxia</span>
+is </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+1)
+<span style="font-style: italic; color: rgb(153, 102, 51);">Sharma,
+S., Bland-Hawthorn, J., Johnston, K. V., &amp; Binney, J. 2011, ApJ,
+730,3</span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">Currently the
+implemented analytic model is the Besancon model from </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+2)<span style="color: rgb(153, 102, 51); font-style: italic;"> Robin,
+A. C., Reyl´e, C., Derri`ere, S., &amp; Picaud, S. 2003, A&amp;A,
+409, 523</span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">Isochrones used
+in galaxia are from&nbsp; Padova Stellar Evolution database. They were
+generated by CMD 2.1 (<a href="http://stev.oapd.inaf.it/cmd">http://stev.oapd.inaf.it/cmd</a>).
+Basic
+reference
+for
+them
+is
+given
+below
+please look at this<a href="http://stev.oapd.inaf.it/%7Elgirardi/cmd_2.3/help.html">
+http://stev.oapd.inaf.it/~lgirardi/cmd_2.3/help.html</a> for more
+reference on isochrones. </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+3)
+<span style="color: rgb(153, 102, 51); font-style: italic;">Marigo,
+P., Girardi, L., Bressan, A., Groenewegen, M. A. T., Silva, L., &amp;
+Granato, G. L. 2008, A&amp;A, 482, 883</span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+4)
+<span style="font-style: italic; color: rgb(153, 102, 51);">Bertelli,
+G., Bressan, A., Chiosi, C., Fagotto, F., &amp; Nasi, E. 1994,
+A&amp;AS, 106, 275</span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">If using N-body
+stellar halos they are from </span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+5)<span style="color: rgb(153, 102, 51);"> <span style="font-style: italic;">Bullock, J. S., &amp; Johnston, K. V.
+2005, ApJ, 635, 931</span></span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+6)
+<span style="color: rgb(153, 102, 51); font-style: italic;">Robertson,
+B., Bullock, J. S., Font, A. S., Johnston, K. V., &amp; Hernquist, L.
+2005, ApJ, 632, 872</span></span><br style="font-family: Helvetica,Arial,sans-serif;">
+<span style="font-family: Helvetica,Arial,sans-serif;">&nbsp;&nbsp;&nbsp;
+7)
+<span style="color: rgb(153, 102, 51); font-style: italic;">Font,
+A. S., Johnston, K. V., Bullock, J. S., &amp; Robertson, B. E. 2006,
+ApJ, 646, 886</span></span><br>
+<br>
+<br>
+
+</body></html>

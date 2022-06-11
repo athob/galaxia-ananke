@@ -1,0 +1,2 @@
+SDSS       18 7 5 u       g       r       i       z
+
