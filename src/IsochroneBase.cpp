@@ -118,7 +118,7 @@ IsochroneBase::IsochroneBase(const string& inputDir,const string& dirname,const 
 	im.resize(300);
 	for(int i=0;i<300;++i)
 		im[i]=i;
-	readIsocrhones(inputDir,dirname,photoSys,extraFieldsOn,magcolorNames);
+	readIsochrones(inputDir,dirname,photoSys,extraFieldsOn,magcolorNames);
 }
 
 
@@ -127,7 +127,7 @@ IsochroneBase::~IsochroneBase()
 	// TODO Auto-generated destructor stub
 }
 
-void IsochroneBase:: readIsocrhones(const string& inputDir,const string& dirname,const string& photoSys,int extraFieldsOn,const string &magcolorNames)
+void IsochroneBase:: readIsochrones(const string& inputDir,const string& dirname,const string& photoSys,int extraFieldsOn,const string &magcolorNames)
 {
 //	int dwarfOn=1;
 	int dwarfOn=0;
