@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 	Parameters All;
 	All.setFromArguments(argc, argv);
 
-	IsochroneDB ic(All.inputDir + "Isochrones/", "padova/", All.photoSys, All.magcolorNames, 1);
+	IsochroneDB ic(All.inputDir + "Isochrones/", All.photoCateg + "/", All.photoSys, All.magcolorNames, 1);
 
 	cout<<"iage "<<"ifeh "<<"Mmin "<<"Mmax "<<"age "<<"feh"<<endl;
 	for(age=6.5;age<10.2;age+=0.5) {
