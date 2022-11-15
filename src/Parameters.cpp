@@ -41,7 +41,7 @@ Parameters::Parameters()
 	if(inputDir[inputDir.length()-1]!='/')
 		inputDir+="/";
 	par_list.push_back(ParMem("outputDir",&outputDir,STRING,"Examples/",1));
-	par_list.push_back(ParMem("photoCateg",&photoCateg,STRING,"padova",0));  // TODO work in progress, keep readOn off
+	par_list.push_back(ParMem("photoCateg",&photoCateg,STRING,"padova",1));  // TODO work in progress, keep readOn off
 	par_list.push_back(ParMem("photoSys",&photoSys,STRING,"UBV",1));
 	par_list.push_back(ParMem("magcolorNames",&magcolorNames,STRING,"V,B-V",1));
 	par_list.push_back(ParMem("appMagLimits[0]",&appMagLimits[0],DOUBLE,"-100.0",1));
