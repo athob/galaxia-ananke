@@ -216,6 +216,8 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 	char buf[512];
 	char fmt[512];
 	char* cptr;
+    char* token;
+    const char* delimiters = " \t";
 	FILE* fd=NULL;
 	char buf_check[512];
 	vector<float> x(iso_fileinfo.fields,0.0);
@@ -238,6 +240,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 	//cout<<"magids are "<<iso_fileinfo.magid[0]<<" "<<iso_fileinfo.magid[1]<<" "<<iso_fileinfo.magid[2]<<"\n";
 
 	int j,i=0;
+	int k=0;
 	int iage;
 	bool linage;
 	if((fd=fopen(fname.c_str(),"r")))
@@ -251,12 +254,24 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				//cout<<"Skipping comments"<<endl;
 			    continue;
 			}
-			if(iso_fileinfo.photoSysName.compare("WFIRST")==0){
+			else if(iso_fileinfo.photoSysName.find("Python")!=string::npos){
+				// cout<<"using py-custom Isochrones"<<endl;
+				iage=1; // index of age column
+				linage=0; // flag if ages are linear instead of log
+                k = 0;
+                token = strtok(buf,delimiters);
+                while(k<iso_fileinfo.fields)
+                {
+                    sscanf(token,"%f", &x[k]);
+                    token = strtok(NULL,delimiters);
+                    k++;
+                }
+			}
+			else if(iso_fileinfo.photoSysName.compare("WFIRST")==0){
 				//cout<<"using new WFIRST Isochrones"<<endl;
 				iage=1;
 				linage=1;
 				sscanf(buf,"%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25],&x[26],&x[27],&x[28],&x[29]);
-				//cout<<x[0]<<"  "<<x[1]<<"  "<<x[2]<<endl;
 			}
 			else if(iso_fileinfo.photoSysName.compare("WFIRST-HST")==0){
 				//cout<<"using WFIRST-HST Isochrones"<<endl;
@@ -280,6 +295,9 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				linage=0;
 				sscanf(buf,"%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15]);
 			}
+			// if((i==0)){
+			// 	cout<<x[0]<<"  "<<x[1]<<"  "<<x[2]<<endl;
+			// }
 
 			//cout<<"iage "<<iage<<" linage "<<linage<<endl;
 			sprintf(buf_check,"%f ",x[2]);
