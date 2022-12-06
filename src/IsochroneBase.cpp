@@ -37,7 +37,7 @@ IsoFileDescriptor::IsoFileDescriptor(const string &fname,const string& photoSys,
 				stringSplit(s," ",sv1);
 				if(int(sv1.size()) != (nmags1+4))
 				{
-					cout << "scan problem in IsoFileDescriptor: Incorrect no of params" << endl;
+					cout << "scan problem in IsoFileDescriptor no of params, expected " << nmags1+4 << ", received " << int(sv1.size()) << endl;
 					exit(1);
 				}
 			}
