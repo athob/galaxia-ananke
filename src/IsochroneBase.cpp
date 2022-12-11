@@ -49,7 +49,7 @@ IsoFileDescriptor::IsoFileDescriptor(const string &fname,const string& photoSys,
 //							cout<<i<<" "<<s<<" "<<ss.good()<<" "<<ss.eof()<<endl;
 			}
 //			cout<<photoSysName<<" "<<fields<<" "<<startid<<" "<<nmags1<<" "<<magnames.size()<<" "<<ss.good()<<endl;
-			if(photoSysName==photoSys)
+			if((photoSysName==photoSys)||(photoSysName.find(photoSys)))
 				break;
 		}
 
@@ -143,7 +143,7 @@ void IsochroneBase:: readIsochrones(const string& inputDir,const string& dirname
 	vector<double> fe(fe1,fe1+sizeof(fe1)/sizeof(fe1[0]));
 	for(size_t i=0;i<fe.size();++i)
 	{
-		if((photoSys.compare("WFIRST-LSST")==0)||(photoSys.compare("WFIRST")==0)||(photoSys.compare("WFIRST-HST")==0)||(photoSys.compare("GAIA")==0)||(photoSys.compare("GAIADR2")==0)) {
+		if((dirname.compare("py_custom/")==0)||(photoSys.compare("WFIRST-LSST")==0)||(photoSys.compare("WFIRST")==0)||(photoSys.compare("WFIRST-HST")==0)||(photoSys.compare("GAIA")==0)||(photoSys.compare("GAIADR2")==0)) {
 			//cout<<"Using new Zsun";
 			FeH.push_back(log10(fe[i]/0.0152));
 		}
@@ -226,7 +226,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 	Isochrone icData;
 	icData.age=-1.0;
 
-	if((iso_fileinfo.photoSysName.compare("WFIRST-LSST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST-HST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST-LST")==0)||(iso_fileinfo.photoSysName.compare("GAIA")==0)||(iso_fileinfo.photoSysName.compare("GAIADR2")==0)) { 
+	if((iso_fileinfo.photoSysName.find("Python")!=string::npos)||(iso_fileinfo.photoSysName.compare("WFIRST-LSST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST-HST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST-LST")==0)||(iso_fileinfo.photoSysName.compare("GAIA")==0)||(iso_fileinfo.photoSysName.compare("GAIADR2")==0)) { 
 		//cout<<"Using new Zsun";
 		icData.FeH=log10(feH1/0.0152);
 	}
@@ -256,7 +256,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 			}
 			else if(iso_fileinfo.photoSysName.find("Python")!=string::npos){
 				// cout<<"using py-custom Isochrones"<<endl;
-				iage=1; // index of age column
+				iage=0; // index of age column
 				linage=0; // flag if ages are linear instead of log
                 k = 0;
                 token = strtok(buf,delimiters);
@@ -318,7 +318,14 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				i++;
 			}
 
-			if((iso_fileinfo.photoSysName.compare("WFIRST-HST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST")==0)||(iso_fileinfo.photoSysName.compare("GAIA")==0)||(iso_fileinfo.photoSysName.compare("GAIADR2")==0)) {
+			if(iso_fileinfo.photoSysName.find("Python")!=string::npos) {
+				icv.back().m.push_back(x[1]);
+				icv.back().Mact.push_back(x[2]);
+				icv.back().Lum.push_back(x[3]);
+				icv.back().Teff.push_back(x[4]);
+				icv.back().Grav.push_back(x[5]);
+			}
+			else if((iso_fileinfo.photoSysName.compare("WFIRST-HST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST")==0)||(iso_fileinfo.photoSysName.compare("GAIA")==0)||(iso_fileinfo.photoSysName.compare("GAIADR2")==0)) {
 				icv.back().m.push_back(x[2]);
 				icv.back().Mact.push_back(x[3]);
 				icv.back().Lum.push_back(x[4]);
