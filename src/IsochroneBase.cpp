@@ -267,6 +267,19 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
                     k++;
                 }
 			}
+			else if(iso_fileinfo.photoSysName.compare("Roman")==0){
+				// cout<<"using py-custom Isochrones"<<endl;
+				iage=2; // index of age column
+				linage=0; // flag if ages are linear instead of log
+                k = 0;
+                token = strtok(buf,delimiters);
+                while(k<iso_fileinfo.fields)
+                {
+                    sscanf(token,"%f", &x[k]);
+                    token = strtok(NULL,delimiters);
+                    k++;
+                }
+			}
 			else if(iso_fileinfo.photoSysName.compare("WFIRST")==0){
 				//cout<<"using new WFIRST Isochrones"<<endl;
 				iage=1;
@@ -330,6 +343,13 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				icv.back().Lum.push_back(x[3]);
 				icv.back().Teff.push_back(x[4]);
 				icv.back().Grav.push_back(x[5]);
+			}
+			else if(iso_fileinfo.photoSysName.compare("Roman")==0) {
+				icv.back().m.push_back(x[3]);
+				icv.back().Mact.push_back(x[5]);
+				icv.back().Lum.push_back(x[6]);
+				icv.back().Teff.push_back(x[7]);
+				icv.back().Grav.push_back(x[8]);
 			}
 			else if((iso_fileinfo.photoSysName.compare("WFIRST-HST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST")==0)||(iso_fileinfo.photoSysName.compare("LSST")==0)||(iso_fileinfo.photoSysName.compare("GAIA")==0)||(iso_fileinfo.photoSysName.compare("GAIADR2")==0)) {
 				icv.back().m.push_back(x[2]);
