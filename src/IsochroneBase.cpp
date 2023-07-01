@@ -267,7 +267,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
                     k++;
                 }
 			}
-			else if(iso_fileinfo.photoSysName.compare("Roman")==0){
+			else if((iso_fileinfo.photoSysName.compare("Roman")==0)||(iso_fileinfo.photoSysName.compare("Euclid")==0)){
 				// cout<<"using py-custom Isochrones"<<endl;
 				iage=2; // index of age column
 				linage=0; // flag if ages are linear instead of log
@@ -344,7 +344,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				icv.back().Teff.push_back(x[4]);
 				icv.back().Grav.push_back(x[5]);
 			}
-			else if(iso_fileinfo.photoSysName.compare("Roman")==0) {
+			else if((iso_fileinfo.photoSysName.compare("Roman")==0)||(iso_fileinfo.photoSysName.compare("Euclid")==0)) {
 				icv.back().m.push_back(x[3]);
 				icv.back().Mact.push_back(x[5]);
 				icv.back().Lum.push_back(x[6]);

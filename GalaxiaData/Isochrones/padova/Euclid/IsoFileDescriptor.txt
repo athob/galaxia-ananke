@@ -1,0 +1,2 @@
+Euclid       34 28 6  VISmag  Ymag  Bluemag  Jmag  Redmag  Hmag
+
