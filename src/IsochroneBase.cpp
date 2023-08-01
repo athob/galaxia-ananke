@@ -204,9 +204,10 @@ void IsochroneBase:: readIsochrones(const string& inputDir,const string& dirname
 	}
 // set Age vector
 	assert(icv[0].FeH==icv[1].FeH);
-	double temp=icv[1].age-icv[0].age;
+	//double temp=icv[1].age-icv[0].age;
 	for(int i=0;i<n_ages;i++)
-		Age.push_back(icv[0].age+i*temp);
+		Age.push_back(icv[i].age);
+		//Age.push_back(icv[0].age+i*temp);
 
 
 }
