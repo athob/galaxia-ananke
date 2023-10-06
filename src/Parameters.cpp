@@ -76,7 +76,7 @@ Parameters::Parameters()
 	par_list.push_back(ParMem("latitude",&latitude,DOUBLE,"90.0",1));
 	par_list.push_back(ParMem("seed",&seed,INT,"17",1));
 	par_list.push_back(ParMem("hdim",&hdim,INT,"6",0));
-	par_list.push_back(ParMem("nres",&nres,INT,"64",0));
+	par_list.push_back(ParMem("nres",&nres,INT,"64",1));
 	par_list.push_back(ParMem("r_min",&r_min,DOUBLE,"0",1));
 	par_list.push_back(ParMem("r_max",&r_max,DOUBLE,"1e10",1));
 	par_list.push_back(ParMem("nstart",&nstart,UINT64,"0",1));

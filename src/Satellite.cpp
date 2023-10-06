@@ -443,7 +443,6 @@ void Satellite::readEbfFile(const string &fname, int sat_no)
 */
 	string s(fname);
 	if(hdim==3)
-	{
 		if(nres==32)
 			s.insert(s.find(".ebf"),"_d3n32_den");
 		else if(nres==64)
@@ -451,14 +450,16 @@ void Satellite::readEbfFile(const string &fname, int sat_no)
 		else if(nres==128)
 			s.insert(s.find(".ebf"),"_d3n128_den");
 		else
-			s.insert(s.find(".ebf"),"_d3n64_den");
-	}
+			s.insert(s.find(".ebf"),"_d3n8_den");
 	else
-		//s.insert(s.find(".ebf"),"_d6n32_den");
-		//s.insert(s.find(".ebf"),"_d6n8_den");
-	    s.insert(s.find(".ebf"),"_density");
-		//s.insert(s.find(".ebf"),"_d6n64_den");
-	        
+		if(nres==32)
+			s.insert(s.find(".ebf"),"_d6n32_den");
+		else if(nres==64)
+			s.insert(s.find(".ebf"),"_d6n64_den");
+		else if(nres==128)
+			s.insert(s.find(".ebf"),"_d6n128_den");
+		else
+			s.insert(s.find(".ebf"),"_d6n8_den");
 
 	ebf::EbfVector<float> fb_hcubic(s,"/H_cubic");
 	if(fb_hcubic.rank()==1)

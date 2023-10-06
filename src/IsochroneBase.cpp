@@ -238,7 +238,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 	icData.addDwarfs(int(iso_fileinfo.extraid.size()),dwarfOn);
 
 
-	cout<<"magids are "<<iso_fileinfo.magid[0]<<" "<<iso_fileinfo.magid[1]<<" "<<iso_fileinfo.magid[2]<<"\n";
+	//cout<<"magids are "<<iso_fileinfo.magid[0]<<" "<<iso_fileinfo.magid[1]<<" "<<iso_fileinfo.magid[2]<<"\n";
 
 	int j,i=0;
 	int k=0;
@@ -288,7 +288,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				sscanf(buf,"%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25],&x[26],&x[27],&x[28],&x[29]);
 			}
 			else if(iso_fileinfo.photoSysName.compare("WFIRST-HST")==0){
-				cout<<"using WFIRST-HST Isochrones"<<endl;
+				//cout<<"using WFIRST-HST Isochrones"<<endl;
 				iage=1;
 				linage=0;
 				sscanf(buf,"%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25],&x[26]);
@@ -300,25 +300,25 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				sscanf(buf,"%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25],&x[26],&x[27],&x[28]);
 			}
 			else if(iso_fileinfo.photoSysName.compare("DECAM")==0){
-				cout<<"using DECAM Isochrones"<<endl;
+				//cout<<"using DECAM Isochrones"<<endl;
 				iage=2;
 				linage=0;
 				sscanf(buf,"%f%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%e%f%e%e%e%e%e%f%e%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25],&x[26],&x[27],&x[28],&x[29],&x[30],&x[31],&x[32],&x[33]);
 			}
 			else if(iso_fileinfo.photoSysName.compare("LSST-DP0")==0){
-				cout<<"using LSST-DP0 Isochrones"<<endl;
+				//cout<<"using LSST-DP0 Isochrones"<<endl;
 				iage=2;
 				linage=0;
 				sscanf(buf,"%f%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%e%f%e%e%e%e%e%f%e%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25],&x[26],&x[27],&x[28],&x[29],&x[30],&x[31],&x[32],&x[33]);
 			}
 			else if(iso_fileinfo.photoSysName.compare("GAIA")==0){
-				cout<<"using Gaia Isochrones"<<endl;
+				//cout<<"using Gaia Isochrones"<<endl;
 				iage=1;
 				linage=1;
 				sscanf(buf,"%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25]);
 			}
 			else if(iso_fileinfo.photoSysName.compare("GAIADR2")==0){
-				cout<<"using Gaia Isochrones"<<endl;
+				//cout<<"using Gaia Isochrones"<<endl;
 				iage=1;
 				linage=1;
 				sscanf(buf,"%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25]);
@@ -331,7 +331,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 			// 	cout<<x[0]<<"  "<<x[1]<<"  "<<x[2]<<endl;
 			// }
 
-			cout<<"iage "<<iage<<" linage "<<linage<<endl;
+			//cout<<"iage "<<iage<<" linage "<<linage<<endl;
 			sprintf(buf_check,"%f ",x[2]);
 			if(strncmp(buf_check,"nan",3)==0)
 				continue;
@@ -345,7 +345,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 			if(double(x[iage])!=icData.age)
 			{
 				icData.age=x[iage];
-				cout<<"Finished with age "<<x[iage]<<" index "<<iage<<endl;
+				//cout<<"Finished with age "<<x[iage]<<" index "<<iage<<endl;
 				icv.push_back(icData);
 				i++;
 			}
