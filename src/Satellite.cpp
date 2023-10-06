@@ -462,7 +462,6 @@ void Satellite::readEbfFile(const string &fname, int sat_no)
 			s.insert(s.find(".ebf"),"_d6n8_den");
 
 	ebf::EbfVector<float> fb_hcubic(s,"/H_cubic");
-
 	if(fb_hcubic.rank()==1)
 	{
 		for(int i=0;i<nsize;++i)

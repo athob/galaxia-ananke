@@ -1,0 +1,1 @@
+LSST-DP0    34 28 6     umag    gmag    rmag    imag    zmag    ymag
