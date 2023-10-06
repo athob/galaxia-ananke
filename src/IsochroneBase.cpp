@@ -37,7 +37,7 @@ IsoFileDescriptor::IsoFileDescriptor(const string &fname,const string& photoSys,
 				stringSplit(s," ",sv1);
 				if(int(sv1.size()) != (nmags1+4))
 				{
-					cout << "scan problem in IsoFileDescriptor: Incorrect no of params" << endl;
+					cout << "scan problem in IsoFileDescriptor no of params, expected " << nmags1+4 << ", received " << int(sv1.size()) << endl;
 					exit(1);
 				}
 			}
@@ -49,7 +49,7 @@ IsoFileDescriptor::IsoFileDescriptor(const string &fname,const string& photoSys,
 //							cout<<i<<" "<<s<<" "<<ss.good()<<" "<<ss.eof()<<endl;
 			}
 //			cout<<photoSysName<<" "<<fields<<" "<<startid<<" "<<nmags1<<" "<<magnames.size()<<" "<<ss.good()<<endl;
-			if(photoSysName==photoSys)
+			if((photoSysName==photoSys)||(photoSysName.find(photoSys)))
 				break;
 		}
 
@@ -118,7 +118,7 @@ IsochroneBase::IsochroneBase(const string& inputDir,const string& dirname,const 
 	im.resize(300);
 	for(int i=0;i<300;++i)
 		im[i]=i;
-	readIsocrhones(inputDir,dirname,photoSys,extraFieldsOn,magcolorNames);
+	readIsochrones(inputDir,dirname,photoSys,extraFieldsOn,magcolorNames);
 }
 
 
@@ -127,7 +127,7 @@ IsochroneBase::~IsochroneBase()
 	// TODO Auto-generated destructor stub
 }
 
-void IsochroneBase:: readIsocrhones(const string& inputDir,const string& dirname,const string& photoSys,int extraFieldsOn,const string &magcolorNames)
+void IsochroneBase:: readIsochrones(const string& inputDir,const string& dirname,const string& photoSys,int extraFieldsOn,const string &magcolorNames)
 {
 //	int dwarfOn=1;
 	int dwarfOn=0;
@@ -143,7 +143,7 @@ void IsochroneBase:: readIsocrhones(const string& inputDir,const string& dirname
 	vector<double> fe(fe1,fe1+sizeof(fe1)/sizeof(fe1[0]));
 	for(size_t i=0;i<fe.size();++i)
 	{
-		if((photoSys.compare("WFIRST-LSST")==0)||(photoSys.compare("WFIRST")==0)||(photoSys.compare("WFIRST-HST")==0)||(photoSys.compare("GAIA")==0)||(photoSys.compare("GAIADR2")==0)||(photoSys.compare("DECAM")==0)||(photoSys.compare("LSST-DP0")==0)) {
+		if((dirname.compare("py_custom/")==0)||(photoSys.compare("WFIRST-LSST")==0)||(photoSys.compare("WFIRST")==0)||(photoSys.compare("WFIRST-HST")==0)||(photoSys.compare("GAIA")==0)||(photoSys.compare("GAIADR2")==0)||(photoSys.compare("DECAM")==0)||(photoSys.compare("LSST-DP0")==0)) {
 			//cout<<"Using new Zsun";
 			FeH.push_back(log10(fe[i]/0.0152));
 		}
@@ -204,9 +204,10 @@ void IsochroneBase:: readIsocrhones(const string& inputDir,const string& dirname
 	}
 // set Age vector
 	assert(icv[0].FeH==icv[1].FeH);
-	double temp=icv[1].age-icv[0].age;
+	//double temp=icv[1].age-icv[0].age;
 	for(int i=0;i<n_ages;i++)
-		Age.push_back(icv[0].age+i*temp);
+		Age.push_back(icv[i].age);
+		//Age.push_back(icv[0].age+i*temp);
 
 
 }
@@ -216,6 +217,8 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 	char buf[512];
 	char fmt[512];
 	char* cptr;
+    char* token;
+    const char* delimiters = " \t";
 	FILE* fd=NULL;
 	char buf_check[512];
 	vector<float> x(iso_fileinfo.fields,0.0);
@@ -224,7 +227,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 	Isochrone icData;
 	icData.age=-1.0;
 
-	if((iso_fileinfo.photoSysName.compare("WFIRST-LSST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST-HST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST-LST")==0)||(iso_fileinfo.photoSysName.compare("GAIA")==0)||(iso_fileinfo.photoSysName.compare("GAIADR2")==0)||(iso_fileinfo.photoSysName.compare("DECAM")==0)||(iso_fileinfo.photoSysName.compare("LSST-DP0")==0)) { 
+	if((iso_fileinfo.photoSysName.find("Python")!=string::npos)||(iso_fileinfo.photoSysName.compare("WFIRST-LSST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST-HST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST-LST")==0)||(iso_fileinfo.photoSysName.compare("GAIA")==0)||(iso_fileinfo.photoSysName.compare("GAIADR2")==0)||(iso_fileinfo.photoSysName.compare("DECAM")==0)||(iso_fileinfo.photoSysName.compare("LSST-DP0")==0)) { 
 		//cout<<"Using new Zsun";
 		icData.FeH=log10(feH1/0.0152);
 	}
@@ -238,6 +241,7 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 	cout<<"magids are "<<iso_fileinfo.magid[0]<<" "<<iso_fileinfo.magid[1]<<" "<<iso_fileinfo.magid[2]<<"\n";
 
 	int j,i=0;
+	int k=0;
 	int iage;
 	bool linage;
 	if((fd=fopen(fname.c_str(),"r")))
@@ -251,18 +255,49 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				//cout<<"Skipping comments"<<endl;
 			    continue;
 			}
-			if(iso_fileinfo.photoSysName.compare("WFIRST")==0){
-				cout<<"using new WFIRST Isochrones"<<endl;
+			else if(iso_fileinfo.photoSysName.find("Python")!=string::npos){
+				// cout<<"using py-custom Isochrones"<<endl;
+				iage=0; // index of age column
+				linage=0; // flag if ages are linear instead of log
+                k = 0;
+                token = strtok(buf,delimiters);
+                while(k<iso_fileinfo.fields)
+                {
+                    sscanf(token,"%f", &x[k]);
+                    token = strtok(NULL,delimiters);
+                    k++;
+                }
+			}
+			else if((iso_fileinfo.photoSysName.compare("Roman")==0)||(iso_fileinfo.photoSysName.compare("Euclid")==0)||(iso_fileinfo.photoSysName.find("JWST")!=string::npos)){
+				// cout<<"using py-custom Isochrones"<<endl;
+				iage=2; // index of age column
+				linage=0; // flag if ages are linear instead of log
+                k = 0;
+                token = strtok(buf,delimiters);
+                while(k<iso_fileinfo.fields)
+                {
+                    sscanf(token,"%f", &x[k]);
+                    token = strtok(NULL,delimiters);
+                    k++;
+                }
+			}
+			else if(iso_fileinfo.photoSysName.compare("WFIRST")==0){
+				//cout<<"using new WFIRST Isochrones"<<endl;
 				iage=1;
 				linage=1;
 				sscanf(buf,"%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25],&x[26],&x[27],&x[28],&x[29]);
-				//cout<<x[0]<<"  "<<x[1]<<"  "<<x[2]<<endl;
 			}
 			else if(iso_fileinfo.photoSysName.compare("WFIRST-HST")==0){
 				cout<<"using WFIRST-HST Isochrones"<<endl;
 				iage=1;
 				linage=0;
 				sscanf(buf,"%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25],&x[26]);
+			}
+			else if(iso_fileinfo.photoSysName.compare("LSST")==0){
+				//cout<<"using LSST Isochrones"<<endl;
+				iage=1;
+				linage=1;
+				sscanf(buf,"%f%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15],&x[16],&x[17],&x[18],&x[19],&x[20],&x[21],&x[22],&x[23],&x[24],&x[25],&x[26],&x[27],&x[28]);
 			}
 			else if(iso_fileinfo.photoSysName.compare("DECAM")==0){
 				cout<<"using DECAM Isochrones"<<endl;
@@ -292,6 +327,9 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				linage=0;
 				sscanf(buf,"%G%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&x[0],&x[1],&x[2],&x[3],&x[4],&x[5],&x[6],&x[7],&x[8],&x[9],&x[10],&x[11],&x[12],&x[13],&x[14],&x[15]);
 			}
+			// if((i==0)){
+			// 	cout<<x[0]<<"  "<<x[1]<<"  "<<x[2]<<endl;
+			// }
 
 			cout<<"iage "<<iage<<" linage "<<linage<<endl;
 			sprintf(buf_check,"%f ",x[2]);
@@ -312,7 +350,21 @@ int IsochroneBase:: readfile(const string& fname,double alpha1,double feH1,const
 				i++;
 			}
 
-			if((iso_fileinfo.photoSysName.compare("WFIRST-HST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST")==0)||(iso_fileinfo.photoSysName.compare("GAIA")==0)||(iso_fileinfo.photoSysName.compare("GAIADR2")==0)) {
+			if(iso_fileinfo.photoSysName.find("Python")!=string::npos) {
+				icv.back().m.push_back(x[1]);
+				icv.back().Mact.push_back(x[2]);
+				icv.back().Lum.push_back(x[3]);
+				icv.back().Teff.push_back(x[4]);
+				icv.back().Grav.push_back(x[5]);
+			}
+			else if((iso_fileinfo.photoSysName.compare("Roman")==0)||(iso_fileinfo.photoSysName.compare("Euclid")==0)||(iso_fileinfo.photoSysName.find("JWST")!=string::npos)) {
+				icv.back().m.push_back(x[3]);
+				icv.back().Mact.push_back(x[5]);
+				icv.back().Lum.push_back(x[6]);
+				icv.back().Teff.push_back(x[7]);
+				icv.back().Grav.push_back(x[8]);
+			}
+			else if((iso_fileinfo.photoSysName.compare("WFIRST-HST")==0)||(iso_fileinfo.photoSysName.compare("WFIRST")==0)||(iso_fileinfo.photoSysName.compare("LSST")==0)||(iso_fileinfo.photoSysName.compare("GAIA")==0)||(iso_fileinfo.photoSysName.compare("GAIADR2")==0)) {
 				icv.back().m.push_back(x[2]);
 				icv.back().Mact.push_back(x[3]);
 				icv.back().Lum.push_back(x[4]);

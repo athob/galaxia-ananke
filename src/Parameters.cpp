@@ -41,6 +41,7 @@ Parameters::Parameters()
 	if(inputDir[inputDir.length()-1]!='/')
 		inputDir+="/";
 	par_list.push_back(ParMem("outputDir",&outputDir,STRING,"Examples/",1));
+	par_list.push_back(ParMem("photoCateg",&photoCateg,STRING,"padova",1));  // TODO work in progress, keep readOn off
 	par_list.push_back(ParMem("photoSys",&photoSys,STRING,"UBV",1));
 	par_list.push_back(ParMem("magcolorNames",&magcolorNames,STRING,"V,B-V",1));
 	par_list.push_back(ParMem("appMagLimits[0]",&appMagLimits[0],DOUBLE,"-100.0",1));
@@ -152,15 +153,16 @@ void Parameters::print( )
 		cout.precision(6);
 		cout<<"----------------------------------"<<endl;
 		cout<<"Parameter Details"<<endl;
-		cout<<"Input Halo Sat File ="<<nbodyFile<<endl;
-		cout<<"Photometric System  ="<<photoSys<<endl;
-//		cout<<"Error Option        ="<<ErrorOption<<endl;
-		cout<<"Geometry Option     ="<<geometryOption<<endl;
-		cout<<"Survey Area         ="<<surveyArea<<endl;
-		cout<<"Absolute Mag Limits ="<<absMagLimits[0]<<" "<<absMagLimits[1]<<endl;
-		cout<<"Apparent Mag Limits ="<<appMagLimits[0]<<" "<<appMagLimits[1]<<endl;
-		cout<<"Color Limits        ="<<colorLimits[0]<<" "<<colorLimits[1]<<endl;
-		cout<<"fSample             ="<<fSample<<endl;
+		cout<<"Input Halo Sat File  ="<<nbodyFile<<endl;
+		cout<<"Photometric Category ="<<photoCateg<<endl;
+		cout<<"Photometric System   ="<<photoSys<<endl;
+//		cout<<"Error Option         ="<<ErrorOption<<endl;
+		cout<<"Geometry Option      ="<<geometryOption<<endl;
+		cout<<"Survey Area          ="<<surveyArea<<endl;
+		cout<<"Absolute Mag Limits  ="<<absMagLimits[0]<<" "<<absMagLimits[1]<<endl;
+		cout<<"Apparent Mag Limits  ="<<appMagLimits[0]<<" "<<appMagLimits[1]<<endl;
+		cout<<"Color Limits         ="<<colorLimits[0]<<" "<<colorLimits[1]<<endl;
+		cout<<"fSample              ="<<fSample<<endl;
 		//		cout<<left<<setw(12)<<"DensityOn "<<setw(12)<<DensityOn<<endl;
 		cout<<"----------------------------------"<<endl;
 }
@@ -340,6 +342,10 @@ void Parameters::setFromArguments(int argc, char **argv)
 				else if (strncmp(argv[i], "--fieldfile=", 12) == 0)
 				{
 					fieldTableFile=c1;
+				}
+				else if (strncmp(argv[i], "--pcat=", 7) == 0)
+				{
+					photoCateg=c1;
 				}
 				else if (strncmp(argv[i], "--psys=", 7) == 0)
 				{

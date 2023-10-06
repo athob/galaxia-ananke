@@ -117,7 +117,7 @@ public:
 	double colorLimits[2];
 	double posC[6];
 	double r_min,r_max;//,age_min,age_max;
-	string photoSys,magcolorNames;
+	string photoCateg,photoSys,magcolorNames;
 
 	int starType,photoError,hdim,nres;
 	uint64_t popID, nstart;

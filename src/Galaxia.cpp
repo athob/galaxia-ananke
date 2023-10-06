@@ -341,7 +341,7 @@ int main(int argc, char **argv)
 		srand48(7);
 		//----------------------------------------------------
 		timer2.start();
-		IsochroneDB ic(All.inputDir + "Isochrones/", "padova/", All.photoSys, All.magcolorNames, 1);
+		IsochroneDB ic(All.inputDir + "Isochrones/", All.photoCateg + "/", All.photoSys, All.magcolorNames, 1);
 		ic.print();
 		timer2.print("Time Isochrone Reading");
 		//-----------------------------------------------------
@@ -367,7 +367,7 @@ int main(int argc, char **argv)
 
 		cout << "Calculating magnitudes in "<<All.photoSys<<" system................" << endl;
 		append1(All.outputDir + All.outputFile + ".ebf", ic,
-						All.inputDir + "Isochrones/padova/", All.photoSys,
+						All.inputDir + "Isochrones/" + All.photoCateg + "/", All.photoSys,
 						All.magcolorNames);
 
 		cout << "Appending spherical coordinates................" << endl;
@@ -384,13 +384,13 @@ int main(int argc, char **argv)
 			cout << "Appending magnitudes in "<<All.photoSys<<" system................" << endl;
 			//----------------------------------------------------
 			timer2.start();
-			IsochroneDB ic(All.inputDir + "Isochrones/", "padova/",
+			IsochroneDB ic(All.inputDir + "Isochrones/", All.photoCateg + "/",
 					All.photoSys, All.magcolorNames, 1);
 			ic.print();
 			timer2.print("Time Isochrone Reading");
 			//----------------------------------------------------
 			append1(All.outputFile + ".ebf", ic,
-						All.inputDir + "Isochrones/padova/", All.photoSys,
+						All.inputDir + "Isochrones/" + All.photoCateg + "/", All.photoSys,
 						All.magcolorNames);
 
 		}

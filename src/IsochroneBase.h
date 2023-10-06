@@ -60,7 +60,7 @@ private:
 	int readfile(const string& fname,double alpha1,double feH1,const IsoFileDescriptor &iso_fileinfo,int dwarfOn);
 
 protected:
-	void readIsocrhones(const string& inputDir,const string& dirname,const string& photoSys,int extraFieldsOn,const string& magcolorNames);
+	void readIsochrones(const string& inputDir,const string& dirname,const string& photoSys,int extraFieldsOn,const string& magcolorNames);
 	inline int index(int i,int j,int k)
 	{
 	//	return ((k*FeH.size()+j)*Age.size()+i);
