@@ -17,7 +17,7 @@
 
 //using namespace std;
 
-struct Ran {
+struct Ran {  // cant find reference https://www.physics.mun.ca/courses/p3800/LECTURES/L10/RandomNR.cpp
 	uint64_t u,v,w;
 	Ran(uint64_t j) : v(4101842887655102017LL), w(1) {
 		u = j ^ v; int64();
