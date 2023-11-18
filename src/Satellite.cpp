@@ -133,7 +133,7 @@ Satellite::~Satellite()
 double kernel_func(double x)
 {
 	double x2=x*x;
-	return (1-x2)*x2*x2*x;
+	return (1-x2);//*x2*x2*x;
 }
 
 void Satellite::spawn1(SurveyDesign &sur, Sampler& imf,IsochroneDB &ic,double fSample,int seed1)
