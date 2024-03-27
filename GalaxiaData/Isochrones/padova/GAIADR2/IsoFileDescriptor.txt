@@ -1,2 +1,0 @@
-GAIADR2      26 23 3 Gmag G_BPmag G_RPmag
-

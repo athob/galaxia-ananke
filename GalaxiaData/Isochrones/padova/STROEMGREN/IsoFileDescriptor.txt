@@ -1,2 +1,0 @@
-STROEMGREN 20 7 7 V1      u       v       b       y       Hb_w    Hb_n
-

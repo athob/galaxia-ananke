@@ -1,1 +1,0 @@
-DECAM       34 28 6     umag    gmag    rmag    imag    zmag    Ymag
