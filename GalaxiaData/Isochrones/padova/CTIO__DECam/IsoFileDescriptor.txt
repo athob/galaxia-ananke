@@ -1,1 +1,1 @@
-CTIO__DECam       34 28 6     umag    gmag    rmag    imag    zmag    Ymag
+CTIO__DECam       34 28 6     u    g    r    i    z    Y

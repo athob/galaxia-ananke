@@ -1,2 +1,2 @@
-LSST       29 23 6  umag    gmag    rmag    imag    zmag    Ymag
+LSST       29 23 6  u    g    r    i    z    Y
 
