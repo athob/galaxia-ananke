@@ -52,7 +52,7 @@ public:
 class StarParticle
 {
 private:
-	double Pos[32];
+	double Pos[33];
 public:
     inline double& pos(int i) {return Pos[i];}
     inline double& feh() {return Pos[6];}
@@ -69,18 +69,19 @@ public:
     inline int64_t& popID() {return *(int64_t *)(Pos+19);}
     inline int64_t& partID() {return *(int64_t *)(Pos+20);}
     inline int64_t& parentID() {return *(int64_t *)(Pos+21);}
+    inline int64_t& partitionID() {return *(int64_t *)(Pos+22);}
 //added formation distance
-    inline double& dform() {return Pos[22];}
+    inline double& dform() {return Pos[23];}
 //added extra abundances
-    inline double& helium() {return Pos[23];}
-    inline double& carbon() {return Pos[24];}
-    inline double& nitrogen() {return Pos[25];}
-    inline double& oxygen() {return Pos[26];}
-    inline double& neon() {return Pos[27];}
-    inline double& magnesium() {return Pos[28];}
-    inline double& silicon() {return Pos[29];}
-    inline double& sulphur()  {return Pos[30];}
-    inline double& calcium() {return Pos[31];}
+    inline double& helium() {return Pos[24];}
+    inline double& carbon() {return Pos[25];}
+    inline double& nitrogen() {return Pos[26];}
+    inline double& oxygen() {return Pos[27];}
+    inline double& neon() {return Pos[28];}
+    inline double& magnesium() {return Pos[29];}
+    inline double& silicon() {return Pos[30];}
+    inline double& sulphur()  {return Pos[31];}
+    inline double& calcium() {return Pos[32];}
     
  /*   void convert(StarParticlef &Starf)
     {
@@ -183,19 +184,20 @@ public:
     inline double& Age() {return Pos[8];}
     inline double& Mass() {return Pos[9];}
     inline double& parentID() {return Pos[10];}
+    inline double& partitionID() {return Pos[11];}
 //added formation distance
-    inline double& dform() {return Pos[11];}
+    inline double& dform() {return Pos[12];}
 //added extra abundances
-    inline double& helium() {return Pos[12];}
-    inline double& carbon() {return Pos[13];}
-    inline double& nitrogen() {return Pos[14];}
-    inline double& oxygen() {return Pos[15];}
-    inline double& neon() {return Pos[16];}
-    inline double& magnesium() {return Pos[17];}
-    inline double& silicon() {return Pos[18];}
-    inline double& sulphur()  {return Pos[19];}
-    inline double& calcium() {return Pos[20];}
-    inline double& h(int k) {return Pos[21+k];};    
+    inline double& helium() {return Pos[13];}
+    inline double& carbon() {return Pos[14];}
+    inline double& nitrogen() {return Pos[15];}
+    inline double& oxygen() {return Pos[16];}
+    inline double& neon() {return Pos[17];}
+    inline double& magnesium() {return Pos[18];}
+    inline double& silicon() {return Pos[19];}
+    inline double& sulphur()  {return Pos[20];}
+    inline double& calcium() {return Pos[21];}
+    inline double& h(int k) {return Pos[22+k];};    
 
 //    inline double& Density() {return Pos[11];} //replaced in new version
 
@@ -212,6 +214,7 @@ public:
     	tags.push_back(ParticleTag("/Age",1,c,dtype,1));c+=tags.back().dim;
     	tags.push_back(ParticleTag("/Mass",1,c,dtype,1));c+=tags.back().dim;
         tags.push_back(ParticleTag("/ParentID",1,c,dtype,1));c+=tags.back().dim;
+        tags.push_back(ParticleTag("/PartitionID",1,c,dtype,1));c+=tags.back().dim;
 
 //added formation distance
         tags.push_back(ParticleTag("/Dform",1,c,dtype,1));c+=tags.back().dim;

@@ -249,6 +249,7 @@ void Satellite::spawn1(SurveyDesign &sur, Sampler& imf,IsochroneDB &ic,double fS
 				Star.popID() = nstars + total(sur.npart) + sur.nstart;
 				Star.partID() = 1;
 				Star.parentID() = Part->parentID(); //keep track of which simulation particle spawned this star
+				Star.partitionID() = Part->partitionID(); //keep track of which partition the particle is part of
 				Star.dform() = Part->dform(); //formation distance of parent particle
 				ic.interpolateStar(Star);
 
@@ -385,6 +386,7 @@ void Satellite::readEbfFile(const string &fname, int sat_no)
 	ebf::EbfVector<float> fb_age(fname,"/Age");
 	ebf::EbfVector<float> fb_mass(fname,"/Mass");
 	ebf::EbfVector<int> fb_parentID(fname,"/ParentID");
+	ebf::EbfVector<int> fb_partitionID(fname,"/PartitionID");
 	ebf::EbfVector<float> fb_dform(fname,"/Dform");
 
 	//eventually replace this method with e.g. readGizmoFile(fname)
@@ -422,6 +424,7 @@ void Satellite::readEbfFile(const string &fname, int sat_no)
 		part[i].Mass()=fb_mass[i];
 		part[i].Age()=fb_age[i];
 		part[i].parentID()=fb_parentID[i];
+		part[i].partitionID()=fb_partitionID[i];
 		part[i].dform() = fb_dform[i];
 		part[i].helium() = fb_helium[i];
 		part[i].carbon() = fb_carbon[i];

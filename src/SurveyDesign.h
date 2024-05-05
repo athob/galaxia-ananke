@@ -57,7 +57,7 @@ public:
 //changed to output int64 and doubles rather than int32 and floats
 
 		ebfA.clear();
-		ebfA.resize(30);
+		ebfA.resize(31);
 		ebfA[0].Open(outputFileR+".tmp0","/px","w",5,"1000 parsec");
 		ebfA[1].Open(outputFileR+".tmp1","/py","w",5,"1000 parsec");
 		ebfA[2].Open(outputFileR+".tmp2","/pz","w",5,"1000 parsec");
@@ -77,22 +77,23 @@ public:
 		ebfA[16].Open(outputFileR+".tmp16","/fieldid","w",3);
 		ebfA[17].Open(outputFileR+".tmp17","/partid","w",3);
 		ebfA[18].Open(outputFileR+".tmp18","/parentid","w",3);
+		ebfA[19].Open(outputFileR+".tmp19","/partitionid","w",3);
 
 //added formation distance
-		ebfA[19].Open(outputFileR+".tmp19","/dform","w",5,"1000 parsec");
+		ebfA[20].Open(outputFileR+".tmp20","/dform","w",5,"1000 parsec");
 
 //added extra abundances		
-		ebfA[20].Open(outputFileR+".tmp20","/helium","w",5);
-		ebfA[21].Open(outputFileR+".tmp21","/carbon","w",5);
-		ebfA[22].Open(outputFileR+".tmp22","/nitrogen","w",5);
-		ebfA[23].Open(outputFileR+".tmp23","/oxygen","w",5);
-		ebfA[24].Open(outputFileR+".tmp24","/neon","w",5);
-		ebfA[25].Open(outputFileR+".tmp25","/magnesium","w",5);
-		ebfA[26].Open(outputFileR+".tmp26","/silicon","w",5);
-		ebfA[27].Open(outputFileR+".tmp27","/sulphur","w",5);
-		ebfA[28].Open(outputFileR+".tmp28","/calcium","w",5);
+		ebfA[21].Open(outputFileR+".tmp21","/helium","w",5);
+		ebfA[22].Open(outputFileR+".tmp22","/carbon","w",5);
+		ebfA[23].Open(outputFileR+".tmp23","/nitrogen","w",5);
+		ebfA[24].Open(outputFileR+".tmp24","/oxygen","w",5);
+		ebfA[25].Open(outputFileR+".tmp25","/neon","w",5);
+		ebfA[26].Open(outputFileR+".tmp26","/magnesium","w",5);
+		ebfA[27].Open(outputFileR+".tmp27","/silicon","w",5);
+		ebfA[28].Open(outputFileR+".tmp28","/sulphur","w",5);
+		ebfA[29].Open(outputFileR+".tmp29","/calcium","w",5);
 //added distance modulus
-		ebfA[29].Open(outputFileR+".tmp29","/dmod","w",5);
+		ebfA[30].Open(outputFileR+".tmp30","/dmod","w",5);
 
 
 		if(All->fieldTable.col.size() == 0)

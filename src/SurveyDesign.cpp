@@ -66,23 +66,25 @@ void SurveyDesign::writeStars(vector<StarParticle> &Stars1)
 		ebfA[17].Write(&(Stars1[i].partID()),1);
 		//ID of parent star particle
 		ebfA[18].Write(&(Stars1[i].parentID()),1);
+		//ID of parent particle partition
+		ebfA[19].Write(&(Stars1[i].partitionID()),1);
 		//formation distance
-		ebfA[19].Write(&(Stars1[i].dform()),1);
+		ebfA[20].Write(&(Stars1[i].dform()),1);
 		//extra abundances
 /*		if(i==0){
 			cout<<"extra abundances: "<<Stars1[i].helium()<<" "<<Stars1[i].calcium()<<endl;
 		}*/
-		ebfA[20].Write(&(Stars1[i].helium()),1);
-		ebfA[21].Write(&(Stars1[i].carbon()),1);
-		ebfA[22].Write(&(Stars1[i].nitrogen()),1);
-		ebfA[23].Write(&(Stars1[i].oxygen()),1);
-		ebfA[24].Write(&(Stars1[i].neon()),1);
-		ebfA[25].Write(&(Stars1[i].magnesium()),1);
-		ebfA[26].Write(&(Stars1[i].silicon()),1);
-		ebfA[27].Write(&(Stars1[i].sulphur()),1);
-		ebfA[28].Write(&(Stars1[i].calcium()),1);
+		ebfA[21].Write(&(Stars1[i].helium()),1);
+		ebfA[22].Write(&(Stars1[i].carbon()),1);
+		ebfA[23].Write(&(Stars1[i].nitrogen()),1);
+		ebfA[24].Write(&(Stars1[i].oxygen()),1);
+		ebfA[25].Write(&(Stars1[i].neon()),1);
+		ebfA[26].Write(&(Stars1[i].magnesium()),1);
+		ebfA[27].Write(&(Stars1[i].silicon()),1);
+		ebfA[28].Write(&(Stars1[i].sulphur()),1);
+		ebfA[29].Write(&(Stars1[i].calcium()),1);
 		//export distance modulus
-		ebfA[29].Write(&(Stars1[i].dmod()),1);
+		ebfA[30].Write(&(Stars1[i].dmod()),1);
 	}
 }
 
