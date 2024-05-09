@@ -1,4 +1,4 @@
-AC_INIT([Galaxia], [0.7.2], [bugsanjib@gmail.com])
+AC_INIT([Galaxia_ananke], [1.0.0], [adrien.thob@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
