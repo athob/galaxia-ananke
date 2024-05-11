@@ -414,7 +414,7 @@ int main(int argc, char **argv)
 
 	timer1.print("Total Time=");
 
-	return 1;
+	return 0;
 }
 
 

@@ -119,7 +119,7 @@ public:
 	double r_min,r_max;//,age_min,age_max;
 	string photoCateg,photoSys,magcolorNames;
 
-	int starType,photoError,hdim,nres;
+	int starType,photoError,hdim,nres,ngen;
 	uint64_t popID, nstart;
 	int warpFlareOn,option,seed;
 	double sigma_r,sigma_vr,sigma_mu,sigma_fe,sigma_al;

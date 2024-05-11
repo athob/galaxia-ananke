@@ -77,6 +77,7 @@ Parameters::Parameters()
 	par_list.push_back(ParMem("seed",&seed,INT,"17",1));
 	par_list.push_back(ParMem("hdim",&hdim,INT,"6",0));
 	par_list.push_back(ParMem("nres",&nres,INT,"64",1));
+	par_list.push_back(ParMem("ngen",&ngen,INT,"0",0));
 	par_list.push_back(ParMem("r_min",&r_min,DOUBLE,"0",1));
 	par_list.push_back(ParMem("r_max",&r_max,DOUBLE,"1e10",1));
 	par_list.push_back(ParMem("nstart",&nstart,UINT64,"0",1));
@@ -222,6 +223,13 @@ void Parameters::checkCompilation( )
 //		posC[3]=0.0; posC[4]=0.0; posC[5]=0.0;
 	}
 
+	if((fSample > 0.0) && (option == 1))
+	{
+		outputFile+=".";
+		outputFile+=std::to_string(ngen);  //append generation number to output file name 
+		seed+=ngen;  //use different seed depending on generation number
+	}
+
 	if(fieldTableFile.size()!=0)
 		fieldTable.readFromFile(fieldTableFile.c_str());
 
@@ -358,6 +366,10 @@ void Parameters::setFromArguments(int argc, char **argv)
 				else if (strncmp(argv[i], "--nres=", 6) == 0)
 				{
 					nres=atoi(c1);
+				}
+				else if (strncmp(argv[i], "--ngen=", 6) == 0)
+				{
+					ngen=atoi(c1);
 				}
 				else if (strncmp(argv[i], "--add=", 5) == 0)
 				{
