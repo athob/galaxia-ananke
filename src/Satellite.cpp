@@ -203,6 +203,10 @@ void Satellite::spawn1(SurveyDesign &sur, Sampler& imf,IsochroneDB &ic,double fS
 
 			//sample star particles from parent particle
 			int status=0;
+			if(sur.All->ngen!=0)
+			{
+				status=1;
+			}
 			for (int l = 0; l < stars; ++l)
 			{
 				for(int i=0;i<6;++i)
