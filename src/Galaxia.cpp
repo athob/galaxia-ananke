@@ -370,9 +370,9 @@ int main(int argc, char **argv)
 						All.inputDir + "Isochrones/" + All.photoCateg + "/", All.photoSys,
 						All.magcolorNames);
 
-		cout << "Appending spherical coordinates................" << endl;
-		append_radec(All.outputDir + All.outputFile, All.inputDir);
-		append_lb(All.outputDir + All.outputFile, All.inputDir);
+		// cout << "Appending spherical coordinates................" << endl;
+		// append_radec(All.outputDir + All.outputFile, All.inputDir);
+		// append_lb(All.outputDir + All.outputFile, All.inputDir);
 
 
 	}
