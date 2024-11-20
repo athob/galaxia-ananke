@@ -187,10 +187,14 @@ void Satellite::spawn1(SurveyDesign &sur, Sampler& imf,IsochroneDB &ic,double fS
 			//assuming they are all of the median stellar mass for the IMF
 			double nstars_float = (Part->Mass() / imf.meanx) * frac * sur.All->fSample;
 
-			//use stochastic rounding to determine the integer number of stars to include
-			int stars = int(nstars_float);
-			if (randomu.doub() <= (nstars_float - stars))
-				stars++;
+			// //use stochastic rounding to determine the integer number of stars to include
+			// int stars = int(nstars_float);
+			// if (randomu.doub() <= (nstars_float - stars))
+			// 	stars++;
+			
+			//use standard rounding to determine the integer number of stars to include, and adjust given ngen
+			double ngen_float = float(sur.All->ngen);
+			int stars = int(round((ngen_float+1)*nstars_float))-int(round(ngen_float*nstars_float));
 
 //			cout<<mmin<<" "<<mmax<<" "<<frac<<" "<<stars<<endl;
 
