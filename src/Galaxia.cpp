@@ -199,7 +199,7 @@ void append1(const string& filename,IsochroneDB& ic,const string& photodir,const
 		vector<double> x(isofile_info.magnames.size()+5,0.0);
 		ebf::EbfVector<float>   age(filename,"/Age");
 		ebf::EbfVector<float>   feh(filename,"/FeH");
-		ebf::EbfVector<float> smass(filename,"/Smass");
+		ebf::EbfVector<float> smass(filename,"/Minit");  // used to be stored under "/smass"
 
 	//	for(size_t i=0;i<isofile_info.magnames.size();++i)
 	//		cout<<i<<" "<<isofile_info.magnames[i]<<endl;

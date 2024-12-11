@@ -66,7 +66,7 @@ public:
 		ebfA[5].Open(outputFileR+".tmp5","/vz","w",5,"1000 meter/second");
 		ebfA[6].Open(outputFileR+".tmp6","/feh","w",5);
 		ebfA[7].Open(outputFileR+".tmp7","/alpha","w",5);
-		ebfA[8].Open(outputFileR+".tmp8","/smass","w",5,"solar_mass");
+		ebfA[8].Open(outputFileR+".tmp8","/minit","w",5,"solar_mass");  // used to be stored under "/smass"
 		ebfA[9].Open(outputFileR+".tmp9","/age","w",5,"log year");
 		ebfA[10].Open(outputFileR+".tmp10","/rad","w",5,"1000 parsec");
 		ebfA[11].Open(outputFileR+".tmp11","/mag0","w",5);
