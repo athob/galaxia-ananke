@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Autoconf
+autom4te.cache/*
+configure~
