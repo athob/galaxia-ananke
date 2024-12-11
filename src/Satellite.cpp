@@ -388,7 +388,7 @@ void Satellite::readEbfFile(const string &fname, int sat_no)
 	ebf::EbfVector<float> fb_feh(fname,"/FeH");
 	ebf::EbfVector<float> fb_alpha(fname,"/Alpha");
 	ebf::EbfVector<float> fb_age(fname,"/Age");
-	ebf::EbfVector<float> fb_mass(fname,"/Mass");
+	ebf::EbfVector<float> fb_mass(fname,"/Massinit");  // used to be /Mass
 	ebf::EbfVector<int> fb_parentID(fname,"/ParentID");
 	ebf::EbfVector<int> fb_partitionID(fname,"/PartitionID");
 	ebf::EbfVector<float> fb_dform(fname,"/Dform");

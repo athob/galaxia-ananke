@@ -212,7 +212,7 @@ public:
     	tags.push_back(ParticleTag("/FeH",1,c,dtype,1));c+=tags.back().dim;
     	tags.push_back(ParticleTag("/Alpha",1,c,dtype,1));c+=tags.back().dim;
     	tags.push_back(ParticleTag("/Age",1,c,dtype,1));c+=tags.back().dim;
-    	tags.push_back(ParticleTag("/Mass",1,c,dtype,1));c+=tags.back().dim;
+    	tags.push_back(ParticleTag("/Massinit",1,c,dtype,1));c+=tags.back().dim;  // used to be /Mass
         tags.push_back(ParticleTag("/ParentID",1,c,dtype,1));c+=tags.back().dim;
         tags.push_back(ParticleTag("/PartitionID",1,c,dtype,1));c+=tags.back().dim;
 
