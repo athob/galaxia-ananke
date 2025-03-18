@@ -196,7 +196,7 @@ void Satellite::spawn1(SurveyDesign &sur, Sampler& imf,IsochroneDB &ic,double fS
 			double ngen_float = float(sur.All->ngen);
 			int stars = int(round((ngen_float+1)*nstars_float))-int(round(ngen_float*nstars_float));
 
-//			cout<<mmin<<" "<<mmax<<" "<<frac<<" "<<stars<<endl;
+//			cout<<Part->parentID()<<" "<<mmin<<" "<<mmax<<" "<<frac<<" "<<stars<<endl;
 
 			//if some stars will be included, set up the sampler to sample only this range of the IMF
 			if (stars > 0) {

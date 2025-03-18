@@ -20,7 +20,7 @@ IsochroneDB::~IsochroneDB()
 	// TODO Auto-generated destructor stub
 }
 
-void IsochroneDB::calculateAgeProb(double Age2,double dAge2)
+void IsochroneDB::calculateAgeProb(double Age2,double dAge2)  // seems unused
 {
 	double Age1[2];
 	Age1[0]=log10(Age2-dAge2);
@@ -77,7 +77,7 @@ void IsochroneDB::calculateAgeProb(double Age2,double dAge2)
 
 }
 
-void IsochroneDB::calculateFeHProb(double FeH2,double dFeH2)
+void IsochroneDB::calculateFeHProb(double FeH2,double dFeH2)  // seems unused
 {
 	double FeH1[2];
 	FeH1[0]=FeH2-3*dFeH2;
@@ -125,7 +125,7 @@ void IsochroneDB::calculateFeHProb(double FeH2,double dFeH2)
 
 
 
-void IsochroneDB::setIsochrones(double Age2,double dAge2,double FeH2,double dFeH2,double maxV1,double mass)
+void IsochroneDB::setIsochrones(double Age2,double dAge2,double FeH2,double dFeH2,double maxV1,double mass)  // this is called nowhere
 {
 	box_mmin=1000.0;
 	box_mmax=0.0;
@@ -173,7 +173,7 @@ void IsochroneDB::setIsochrones(double Age2,double dAge2,double FeH2,double dFeH
 		n_tot++;
 }
 
-void IsochroneDB::generateStar(StarParticle &Star)
+void IsochroneDB::generateStar(StarParticle &Star)  // this is called nowhere
 {
 
 	double temp;
@@ -206,7 +206,7 @@ void IsochroneDB::generateStar(StarParticle &Star)
 }
 
 
-void IsochroneDB::setIsochrones1(double Age2,double dAge2,double FeH2,double dFeH2,double maxV1,double mass,int starType)
+void IsochroneDB::setIsochrones1(double Age2,double dAge2,double FeH2,double dFeH2,double maxV1,double mass,int starType)  // this is called nowhere
 {
 	box_mmin=1000.0;
 	box_mmax=0.0;
@@ -270,18 +270,18 @@ void IsochroneDB::setIsochrones1(double Age2,double dAge2,double FeH2,double dFe
 }
 
 
-void IsochroneDB::interpolateStar(StarParticle &Star)
+void IsochroneDB::interpolateStar(StarParticle &Star)  // used when initializing
 {
 
 	int i,j;
 	float tempf=Star.age();
-
-	if(tempf<=Age.front())
-		i=0;
-	else if(tempf>=Age.back())
-		i=int(Age.size()-1);
-	else
-		i=int((tempf-Age[0])/dAge+0.5);
+	// if(tempf<=Age.front())
+	// 	i=0;
+	// else if(tempf>=Age.back())
+	// 	i=int(Age.size()-1);
+	// else
+	// 	i=int((tempf-Age[0])/dAge+0.5);
+	i=locate_nearest(Age,double(tempf));
 
 	tempf=Star.feh();
 	j=locate_nearest(FeH,double(tempf));
@@ -301,15 +301,16 @@ void IsochroneDB::interpolateStar(StarParticle &Star)
 
 
 
-void IsochroneDB::interpolateTGM(float age1,float feh1,float smass1,vector<double> &x)
+void IsochroneDB::interpolateTGM(float age1,float feh1,float smass1,vector<double> &x)  // used when appending
 {
 	int i;
-	if(age1<=Age.front())
-		i=0;
-	else if(age1>=Age.back())
-		i=int(Age.size()-1);
-	else
-		i=int((age1-Age[0])/dAge+0.5);
+	// if(age1<=Age.front())
+	// 	i=0;
+	// else if(age1>=Age.back())
+	// 	i=int(Age.size()-1);
+	// else
+	// 	i=int((age1-Age[0])/dAge+0.5);
+	int i=locate_nearest(Age,double(age1));
 
 	int j=locate_nearest(FeH,double(feh1));
 	size_t k=index(i,j,0);
@@ -340,29 +341,26 @@ void IsochroneDB::min_max_m_new(double age, double feh, double alpha, double* m_
 	} else {
 
 		//find index of isochrones closest to age and feh in table
-		//this finds the index of the first element larger than the age and feh values
-		iage_up = int(upper_bound(Age.begin(), Age.end(), age) - Age.begin() - 1);
-		ife_up = int(upper_bound(FeH.begin(), FeH.end(), feh) - FeH.begin() - 1);
 
-		iage_lo = (iage_up>0 ? iage_up-1 : 0);
-		ife_lo = (ife_up>0 ? ife_up-1 : 0);
+	// 	//this finds the index of the first element larger than the age and feh values
+	// 	iage_up = int(upper_bound(Age.begin(), Age.end(), age) - Age.begin() - 1);
+	// 	ife_up = int(upper_bound(FeH.begin(), FeH.end(), feh) - FeH.begin() - 1);
+	// 	iage_lo = (iage_up>0 ? iage_up-1 : 0);
+	// 	ife_lo = (ife_up>0 ? ife_up-1 : 0);
+	// //	iage_up = max(iage_up, 0);
+	// //	ife_up = max(iage_up, 0);
+	// //	iage_lo = min(iage_lo,int(Age.end()-Age.begin()-1));
+	// //	ife_lo = min(ife_lo, int(FeH.end()-FeH.begin()-1));
+	// 	//determine which index points to the closer one
+	// 	dage1 = fabs(Age[iage_up] - age);
+	// 	dage2 = fabs(age - Age[iage_up]);
+	// 	dfe1 = fabs(FeH[ife_up] - feh);
+	// 	dfe2 = fabs(feh - FeH[ife_lo]);
+	// 	iage = (dage1<dage2 ? iage_up : iage_lo);
+	// 	ifeh = (dfe1<dfe2 ? ife_up : ife_lo); 
 
-	//	iage_up = max(iage_up, 0);
-	//	ife_up = max(iage_up, 0);
-
-	//	iage_lo = min(iage_lo,int(Age.end()-Age.begin()-1));
-	//	ife_lo = min(ife_lo, int(FeH.end()-FeH.begin()-1));
-
-		//determine which index points to the closer one
-
-		dage1 = fabs(Age[iage_up] - age);
-		dage2 = fabs(age - Age[iage_up]);
-
-		dfe1 = fabs(FeH[ife_up] - feh);
-		dfe2 = fabs(feh - FeH[ife_lo]);
-
-		iage = (dage1<dage2 ? iage_up : iage_lo);
-		ifeh = (dfe1<dfe2 ? ife_up : ife_lo); 
+		iage = locate_nearest(Age, age);
+		ifeh = locate_nearest(FeH, feh);
 
 		//cout<<age<<" "<<feh<<" "<<iage<<" "<<ifeh<<" ";
 
@@ -387,7 +385,7 @@ void IsochroneDB::min_max_m_new(double age, double feh, double alpha, double* m_
 
 void IsochroneDB::min_max_m(vector<double> &age_a, vector<double> &FeH_a,
 		vector<double> &Alpha_a, vector<double> &m1_a, vector<double> &m2_a,
-		double maxV, int OptRR)
+		double maxV, int OptRR)  // this is called nowhere
 {
 	int p1, q1, p2, q2, ii, i1;
 	m1_a.resize(age_a.size(), 0.0);
