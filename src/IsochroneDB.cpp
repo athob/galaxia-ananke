@@ -303,7 +303,7 @@ void IsochroneDB::interpolateStar(StarParticle &Star)  // used when initializing
 
 void IsochroneDB::interpolateTGM(float age1,float feh1,float smass1,vector<double> &x)  // used when appending
 {
-	int i;
+	// int i;
 	// if(age1<=Age.front())
 	// 	i=0;
 	// else if(age1>=Age.back())
