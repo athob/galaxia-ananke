@@ -132,6 +132,17 @@ inline double grandomn()
 }
 
 
+template<class T>
+double mag2phys(T magnitude)
+{
+	return pow(10,-magnitude/2.5);
+}
+
+template<class T>
+double phys2mag(T physical)
+{
+	return -2.5*log10(physical);
+}
 
 template<class T>
 double theta(T Pos)

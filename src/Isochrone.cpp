@@ -98,9 +98,12 @@ void Isochrone:: interpolate(StarParticle &Star)
 	{
 		int i=locate(m,double(smass_t));
 		double temp=(smass_t-m[i])/(m[i+1]-m[i]);
-		Star.mag(0)=Mag0[i]+(Mag0[i+1]-Mag0[i])*temp;
-		Star.mag(1)=Mag1[i]+(Mag1[i+1]-Mag1[i])*temp;
-		Star.mag(2)=Mag2[i]+(Mag2[i+1]-Mag2[i])*temp;
+		// Star.mag(0)=Mag0[i]+(Mag0[i+1]-Mag0[i])*temp;
+		// Star.mag(1)=Mag1[i]+(Mag1[i+1]-Mag1[i])*temp;
+		// Star.mag(2)=Mag2[i]+(Mag2[i+1]-Mag2[i])*temp;
+		Star.mag(0)=phys2mag(mag2phys(Mag0[i])+(mag2phys(Mag0[i+1])-mag2phys(Mag0[i]))*temp);
+		Star.mag(1)=phys2mag(mag2phys(Mag1[i])+(mag2phys(Mag1[i+1])-mag2phys(Mag1[i]))*temp);
+		Star.mag(2)=phys2mag(mag2phys(Mag2[i])+(mag2phys(Mag2[i+1])-mag2phys(Mag2[i]))*temp);
 		Star.lum()=Lum[i]+(Lum[i+1]-Lum[i])*temp;
 		Star.teff()=Teff[i]+(Teff[i+1]-Teff[i])*temp;
 		Star.grav()=Grav[i]+(Grav[i+1]-Grav[i])*temp;
@@ -148,7 +151,8 @@ void Isochrone::interpolateTGM(float smass,vector<double> &x)
 		if(x.size()>5)
 		for(size_t k=5;k<x.size();++k)
 		{
-			x[k]=Mags[k-5][i]+(Mags[k-5][i+1]-Mags[k-5][i])*temp;
+			// x[k]=Mags[k-5][i]+(Mags[k-5][i+1]-Mags[k-5][i])*temp;
+			x[k]=phys2mag(mag2phys(Mags[k-5][i])+(mag2phys(Mags[k-5][i+1])-mag2phys(Mags[k-5][i]))*temp);
 		}
 	}
 
