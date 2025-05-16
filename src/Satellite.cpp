@@ -454,7 +454,7 @@ void Satellite::readEbfFile(const string &fname, int sat_no)
 */
 	string s(fname);
 	if(hdim==3)
-		if(nres==32)
+		if(nres==32)  // TODO Note for self: this is the only place where nres is used... feels like its usage could be entirely discarded
 			s.insert(s.find(".ebf"),"_d3n32_den");
 		else if(nres==64)
 			s.insert(s.find(".ebf"),"_d3n64_den");
